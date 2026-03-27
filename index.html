@@ -450,6 +450,77 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Outfit
 .results-expr-fr{font-family:'Fraunces',serif;font-size:1rem;font-weight:700;color:var(--text);margin-bottom:2px}
 .results-expr-lit{font-size:0.78rem;color:var(--gold);font-style:italic;margin-bottom:4px}
 .results-expr-mean{font-size:0.78rem;color:var(--text2)}
+
+/* ── FEEDBACK FAB ── */
+.feedback-fab{position:fixed;bottom:24px;right:20px;width:46px;height:46px;border-radius:50%;background:var(--gold);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:90;transition:transform 0.18s,background 0.18s;box-shadow:0 4px 16px rgba(0,0,0,0.4)}
+.feedback-fab:hover,.feedback-fab:active{transform:scale(1.1);background:#c99b2a}
+.feedback-fab svg{width:20px;height:20px;display:block}
+.feedback-fab.hidden{display:none}
+
+/* ── FEEDBACK MODAL ── */
+.fb-modal-bg{position:fixed;inset:0;background:rgba(0,0,0,0.65);z-index:200;display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;pointer-events:none;transition:opacity 0.2s}
+.fb-modal-bg.open{opacity:1;pointer-events:all}
+.fb-modal{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);width:100%;max-width:400px;padding:24px;position:relative}
+.fb-modal-close{position:absolute;top:14px;right:16px;background:none;border:none;color:var(--text2);cursor:pointer;font-size:1.3rem;line-height:1;transition:color 0.15s}
+.fb-modal-close:hover{color:var(--text)}
+.fb-modal-title{font-family:'Fraunces',serif;font-size:1.15rem;font-weight:700;color:var(--text);margin-bottom:4px}
+.fb-modal-sub{font-size:0.8rem;color:var(--text2);margin-bottom:18px;line-height:1.5}
+.fb-page-pill{background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:7px 12px;display:flex;align-items:center;gap:8px;margin-bottom:16px}
+.fb-page-pill-label{font-size:0.65rem;text-transform:uppercase;letter-spacing:0.08em;color:var(--text3)}
+.fb-page-pill-value{font-size:0.8rem;color:var(--gold);font-weight:600}
+.fb-modal label{display:block;font-size:0.68rem;text-transform:uppercase;letter-spacing:0.08em;color:var(--text3);margin-bottom:6px}
+.fb-modal select,.fb-modal textarea{width:100%;background:var(--surface2);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:10px 12px;color:var(--text);font-family:'Outfit',sans-serif;font-size:0.92rem;outline:none;transition:border-color 0.2s}
+.fb-modal select{margin-bottom:14px;cursor:pointer}
+.fb-modal select option{background:var(--surface2)}
+.fb-modal select:focus,.fb-modal textarea:focus{border-color:var(--gold)}
+.fb-modal textarea{resize:none;height:100px;margin-bottom:5px}
+.fb-word-count{font-size:0.7rem;color:var(--text3);text-align:right;margin-bottom:16px}
+.fb-word-count.warn{color:var(--red)}
+.fb-modal-actions{display:flex;justify-content:flex-end;gap:8px}
+.fb-btn-cancel{background:transparent;border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:9px 16px;color:var(--text2);font-family:'Outfit',sans-serif;font-size:0.85rem;cursor:pointer;transition:all 0.18s}
+.fb-btn-cancel:hover{border-color:var(--text2);color:var(--text)}
+.fb-btn-submit{background:var(--gold);color:#000;border:none;border-radius:var(--radius-sm);padding:9px 16px;font-family:'Outfit',sans-serif;font-size:0.85rem;font-weight:700;cursor:pointer;transition:opacity 0.18s}
+.fb-btn-submit:hover{opacity:0.88}
+.fb-btn-submit:disabled{opacity:0.35;cursor:default}
+
+/* ── ADMIN SCREEN ── */
+#adminScreen{background:var(--bg)}
+.admin-top{padding:14px 18px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border);flex-shrink:0;background:var(--surface)}
+.admin-body{flex:1;overflow-y:auto;padding:16px 18px 40px;max-width:600px;margin:0 auto;width:100%;display:flex;flex-direction:column;gap:14px}
+.admin-stats-row{display:flex;gap:8px}
+.admin-stat{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);padding:10px 14px;flex:1;text-align:center}
+.admin-stat-val{font-family:'Fraunces',serif;font-size:1.3rem;font-weight:700;color:var(--text)}
+.admin-stat-lab{font-size:0.62rem;text-transform:uppercase;letter-spacing:0.08em;color:var(--text2);margin-top:2px}
+.admin-filter{background:var(--surface2);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:9px 12px;color:var(--text);font-family:'Outfit',sans-serif;font-size:0.82rem;cursor:pointer;width:100%}
+.admin-filter option{background:var(--surface2)}
+.admin-group{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden}
+.admin-group-hdr{display:flex;align-items:center;gap:10px;padding:13px 16px;cursor:pointer;background:none;border:none;width:100%;text-align:left;font-family:'Outfit',sans-serif;color:var(--text);transition:background 0.15s}
+.admin-group-hdr:hover{background:var(--surface2)}
+.admin-group-icon{font-size:0.9rem}
+.admin-group-label{font-size:0.9rem;font-weight:600;flex:1}
+.admin-group-badge{font-size:0.68rem;font-weight:700;padding:2px 8px;border-radius:20px}
+.admin-group-badge.new{background:rgba(248,81,73,0.2);color:var(--red)}
+.admin-group-badge.done{background:rgba(63,185,80,0.18);color:var(--green)}
+.admin-group-badge.muted{background:var(--surface2);color:var(--text2)}
+.admin-group-chevron{font-size:0.65rem;color:var(--text3);transition:transform 0.2s}
+.admin-group-chevron.open{transform:rotate(90deg)}
+.admin-group-body{display:none}
+.admin-group-body.open{display:block}
+.admin-fb-item{padding:14px 16px;border-top:1px solid var(--border);display:flex;align-items:flex-start;gap:12px}
+.admin-fb-avatar{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Fraunces',serif;font-size:0.78rem;font-weight:700;flex-shrink:0}
+.admin-fb-body{flex:1;min-width:0}
+.admin-fb-meta{display:flex;align-items:center;gap:8px;margin-bottom:6px;flex-wrap:wrap}
+.admin-fb-name{font-size:0.85rem;font-weight:600;color:var(--text)}
+.admin-fb-cat{font-size:0.68rem;padding:2px 7px;border-radius:10px;background:var(--surface2);color:var(--text2)}
+.admin-fb-time{font-size:0.7rem;color:var(--text3);margin-left:auto}
+.admin-fb-page{display:inline-flex;align-items:center;gap:5px;background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:3px 9px;font-size:0.7rem;color:var(--gold);margin-bottom:7px}
+.admin-fb-text{font-size:0.83rem;color:var(--text2);line-height:1.55}
+.admin-fb-actions{margin-top:8px;display:flex;gap:6px}
+.admin-fb-btn{font-size:0.7rem;padding:4px 11px;border-radius:6px;cursor:pointer;border:1.5px solid var(--border);background:none;color:var(--text2);font-family:'Outfit',sans-serif;transition:all 0.15s}
+.admin-fb-btn:hover{background:var(--surface2);color:var(--text)}
+.admin-fb-btn.resolve{border-color:rgba(63,185,80,0.35);color:var(--green)}
+.admin-fb-btn.resolve:hover{background:rgba(63,185,80,0.1)}
+.admin-empty{text-align:center;padding:32px;color:var(--text3);font-size:0.85rem}
 </style>
 </head>
 <body>
@@ -486,6 +557,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Outfit
       <span class="user-name" id="menuName"></span>
     </div>
     <button class="back-btn" id="menuProgressBtn" title="Progress" style="font-size:1.1rem">📊</button>
+    <button class="back-btn" id="menuAdminBtn" title="Feedback admin" style="font-size:1.1rem">💬</button>
   </div>
   <div class="menu-body">
     <div class="stats-row">
@@ -598,6 +670,33 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Outfit
       <div class="mode-count">30</div>
     </div>
 
+  </div>
+</div>
+
+<!-- ADMIN SCREEN -->
+<div class="screen hidden" id="adminScreen">
+  <div class="admin-top">
+    <button class="back-btn" id="adminBack">←</button>
+    <div class="user-info">
+      <span style="font-size:0.75rem;text-transform:uppercase;letter-spacing:0.1em;color:var(--text2)">💬 Feedback</span>
+    </div>
+    <div style="width:32px"></div>
+  </div>
+  <div class="admin-body">
+    <div class="admin-stats-row">
+      <div class="admin-stat"><div class="admin-stat-val" id="adminStatNew">0</div><div class="admin-stat-lab">New</div></div>
+      <div class="admin-stat"><div class="admin-stat-val" id="adminStatResolved">0</div><div class="admin-stat-lab">Resolved</div></div>
+      <div class="admin-stat"><div class="admin-stat-val" id="adminStatTotal">0</div><div class="admin-stat-lab">Total</div></div>
+    </div>
+    <select class="admin-filter" id="adminFilter" onchange="renderAdminFeedback()">
+      <option value="all">All categories</option>
+      <option value="Suggestion">Suggestion</option>
+      <option value="Bug report">Bug report</option>
+      <option value="Content issue">Content issue</option>
+      <option value="Other">Other</option>
+    </select>
+    <div id="adminGroups"></div>
+    <div class="admin-empty" id="adminEmpty" style="display:none">No feedback items match this filter.</div>
   </div>
 </div>
 
@@ -897,6 +996,42 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Outfit
 </div>
 
 <div class="toast" id="toast"></div>
+
+<!-- FEEDBACK FAB -->
+<button class="feedback-fab hidden" id="feedbackFab" onclick="openFeedbackModal()" title="Share feedback">
+  <svg viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+  </svg>
+</button>
+
+<!-- FEEDBACK MODAL -->
+<div class="fb-modal-bg" id="fbModalBg" onclick="closeFeedbackOutside(event)">
+  <div class="fb-modal">
+    <button class="fb-modal-close" onclick="closeFeedbackModal()">×</button>
+    <div class="fb-modal-title">Share feedback</div>
+    <div class="fb-modal-sub">Help improve the app — flag an issue, make a suggestion, or ask a question.</div>
+    <div class="fb-page-pill">
+      <span class="fb-page-pill-label">Page</span>
+      <span class="fb-page-pill-value" id="fbPageContext">Menu</span>
+    </div>
+    <label>Category</label>
+    <select id="fbCategory">
+      <option>Suggestion</option>
+      <option>Bug report</option>
+      <option>Content issue</option>
+      <option>Other</option>
+    </select>
+    <label>Your feedback <span style="text-transform:none;font-size:0.7rem;color:var(--text3)">(max 200 words)</span></label>
+    <textarea id="fbText" placeholder="Tell us what you think…"
+      autocorrect="off" spellcheck="true" enterkeyhint="done"
+      oninput="fbUpdateCount()"></textarea>
+    <div class="fb-word-count" id="fbWordCount">0 / 200 words</div>
+    <div class="fb-modal-actions">
+      <button class="fb-btn-cancel" onclick="closeFeedbackModal()">Cancel</button>
+      <button class="fb-btn-submit" id="fbSubmitBtn" onclick="submitFeedback()" disabled>Submit</button>
+    </div>
+  </div>
+</div>
 
 <script>
 // ═══════════════════════════════════════════════
@@ -2474,6 +2609,7 @@ function showScreen(id){
   const el=document.getElementById(id);
   el.classList.remove('hidden');
   el.scrollTop=0;
+  updateFabVisibility();
 }
 
 // ══════════════════════════════════════════════
@@ -4209,6 +4345,7 @@ function openProgressScreen(){
 }
 
 document.getElementById('menuProgressBtn').onclick = () => openProgressScreen();
+document.getElementById('menuAdminBtn').onclick = () => openAdminScreen();
 document.getElementById('progressBack').onclick = () => openMenu();
 
 // ══════════════════════════════════════════════
@@ -4323,6 +4460,193 @@ document.getElementById('exprNext').onclick = () => {
 };
 
 
+
+// ══════════════════════════════════════════════
+//  FEEDBACK & ADMIN
+// ══════════════════════════════════════════════
+
+// Storage key for feedback entries
+const FB_KEY = 'fr_feedback';
+
+function loadFeedback(){
+  try{ return JSON.parse(localStorage.getItem(FB_KEY)) || []; }catch{ return []; }
+}
+function saveFeedback(data){
+  try{ localStorage.setItem(FB_KEY, JSON.stringify(data)); }catch(e){ console.warn('Storage unavailable', e); }
+}
+
+// Derive a human-readable page label from the current active screen
+function getFeedbackPageContext(){
+  const active = document.querySelector('.screen:not(.hidden)');
+  if(!active) return 'Unknown';
+  const id = active.id;
+  const modeLabels = {
+    profileScreen: 'Profile select',
+    menuScreen: 'Menu',
+    studyScreen: (() => {
+      const badge = document.getElementById('studyModeBadge');
+      const dir   = document.getElementById('studyDirBadge');
+      return (badge ? badge.textContent : 'Study') + (dir ? ' · ' + dir.textContent : '');
+    })(),
+    resultsScreen: 'Results',
+    drillScreen: 'Adjective Drill',
+    synScreen: 'Synonyms',
+    timeScreen: 'Time Expressions',
+    progressScreen: 'Progress',
+    exprScreen: 'Expressions',
+    adminScreen: 'Admin / Feedback'
+  };
+  return modeLabels[id] || id;
+}
+
+// Show / hide the FAB on relevant screens
+function updateFabVisibility(){
+  const fab = document.getElementById('feedbackFab');
+  if(!fab) return;
+  const active = document.querySelector('.screen:not(.hidden)');
+  const hiddenOn = ['profileScreen', 'adminScreen'];
+  if(active && hiddenOn.includes(active.id)){
+    fab.classList.add('hidden');
+  } else {
+    fab.classList.remove('hidden');
+  }
+}
+
+
+
+// Modal open / close
+function openFeedbackModal(){
+  document.getElementById('fbPageContext').textContent = getFeedbackPageContext();
+  document.getElementById('fbText').value = '';
+  document.getElementById('fbWordCount').textContent = '0 / 200 words';
+  document.getElementById('fbWordCount').classList.remove('warn');
+  document.getElementById('fbSubmitBtn').disabled = true;
+  document.getElementById('fbModalBg').classList.add('open');
+}
+function closeFeedbackModal(){
+  document.getElementById('fbModalBg').classList.remove('open');
+}
+function closeFeedbackOutside(e){
+  if(e.target === document.getElementById('fbModalBg')) closeFeedbackModal();
+}
+
+// Word count + cap
+function fbUpdateCount(){
+  const raw = document.getElementById('fbText').value;
+  const words = raw.trim() ? raw.trim().split(/\s+/).length : 0;
+  const wc = document.getElementById('fbWordCount');
+  if(words > 200){
+    const trimmed = raw.trim().split(/\s+/).slice(0, 200).join(' ');
+    document.getElementById('fbText').value = trimmed;
+    wc.textContent = '200 / 200 words';
+    wc.classList.add('warn');
+    document.getElementById('fbSubmitBtn').disabled = false;
+    return;
+  }
+  wc.textContent = words + ' / 200 words';
+  wc.classList.toggle('warn', words > 200);
+  document.getElementById('fbSubmitBtn').disabled = words === 0;
+}
+
+// Submit
+function submitFeedback(){
+  const text = document.getElementById('fbText').value.trim();
+  const cat  = document.getElementById('fbCategory').value;
+  const page = document.getElementById('fbPageContext').textContent;
+  if(!text) return;
+  const all = loadFeedback();
+  all.unshift({
+    id: Date.now(),
+    user: currentProfile ? currentProfile.name : 'Unknown',
+    color: currentProfile ? currentProfile.color : '#58a6ff',
+    cat,
+    text,
+    page,
+    time: new Date().toLocaleString('en-GB',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'}),
+    status: 'new'
+  });
+  saveFeedback(all);
+  closeFeedbackModal();
+  showToast('Feedback submitted — thanks!');
+}
+
+// ── Admin screen ──
+function openAdminScreen(){
+  showScreen('adminScreen');
+  renderAdminFeedback();
+}
+
+function renderAdminFeedback(){
+  const filter = document.getElementById('adminFilter').value;
+  const all = loadFeedback();
+  const filtered = filter === 'all' ? all : all.filter(f => f.cat === filter);
+
+  const newItems      = filtered.filter(f => f.status === 'new');
+  const resolvedItems = filtered.filter(f => f.status === 'resolved');
+
+  document.getElementById('adminStatNew').textContent      = all.filter(f=>f.status==='new').length;
+  document.getElementById('adminStatResolved').textContent = all.filter(f=>f.status==='resolved').length;
+  document.getElementById('adminStatTotal').textContent    = all.length;
+
+  const container = document.getElementById('adminGroups');
+  container.innerHTML = '';
+  document.getElementById('adminEmpty').style.display = filtered.length === 0 ? 'block' : 'none';
+
+  [
+    { items: newItems,      label: 'New',      icon: '○', badgeClass: 'new' },
+    { items: resolvedItems, label: 'Resolved', icon: '✓', badgeClass: 'done' }
+  ].forEach(g => {
+    if(!g.items.length) return;
+    const grp = document.createElement('div');
+    grp.className = 'admin-group';
+    grp.innerHTML = `
+      <button class="admin-group-hdr" onclick="toggleAdminGroup(this)">
+        <span class="admin-group-icon">${g.icon}</span>
+        <span class="admin-group-label">${g.label}</span>
+        <span class="admin-group-badge ${g.badgeClass}">${g.items.length}</span>
+        <span class="admin-group-chevron open">›</span>
+      </button>
+      <div class="admin-group-body open">
+        ${g.items.map(f => renderAdminItem(f)).join('')}
+      </div>`;
+    container.appendChild(grp);
+  });
+}
+
+function renderAdminItem(f){
+  const initials = f.user.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
+  const resolveBtn = f.status === 'new'
+    ? `<button class="admin-fb-btn resolve" onclick="resolveAdminItem(${f.id})">Mark resolved</button>` : '';
+  return `<div class="admin-fb-item">
+    <div class="admin-fb-avatar" style="background:${f.color}22;color:${f.color}">${initials}</div>
+    <div class="admin-fb-body">
+      <div class="admin-fb-meta">
+        <span class="admin-fb-name">${f.user}</span>
+        <span class="admin-fb-cat">${f.cat}</span>
+        <span class="admin-fb-time">${f.time}</span>
+      </div>
+      <div class="admin-fb-page">◎ ${f.page}</div>
+      <div class="admin-fb-text">${f.text}</div>
+      <div class="admin-fb-actions">${resolveBtn}</div>
+    </div>
+  </div>`;
+}
+
+function resolveAdminItem(id){
+  const all = loadFeedback();
+  const item = all.find(f => f.id === id);
+  if(item){ item.status = 'resolved'; saveFeedback(all); renderAdminFeedback(); }
+}
+
+function toggleAdminGroup(btn){
+  const body = btn.nextElementSibling;
+  const chev = btn.querySelector('.admin-group-chevron');
+  const open = body.classList.toggle('open');
+  chev.classList.toggle('open', open);
+}
+
+// Wire up admin button on menu top-bar (📊 is progress; we add 💬 admin btn)
+document.getElementById('adminBack').onclick = () => openMenu();
 
 // ══════════════════════════════════════════════
 //  INIT
