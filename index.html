@@ -1,0 +1,2154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="French GCSE">
+<meta name="theme-color" content="#0d1117">
+<link rel="apple-touch-icon" href="icon.png">
+<title>French GCSE Flashcards</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,700;0,900;1,700&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,700;0,900;1,700&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<meta property="og:title" content="French GCSE Flashcards">
+<meta property="og:description" content="GCSE French revision flashcards — vocab, grammar and expressions">
+<meta property="og:type" content="website">
+</head>
+<body>
+
+<!-- PROFILE SCREEN -->
+<div class="screen" id="profileScreen" tabindex="0">
+  <div class="logo" id="langLogo">
+    <h1 id="logoH1">French <span>GCSE</span></h1>
+    <p id="logoSub">AQA 8652 · 2026 Exams</p>
+  </div>
+  <div style="display:flex;gap:8px;margin-bottom:18px;background:var(--surface);border-radius:40px;padding:4px;border:1px solid var(--border);width:100%;max-width:380px">
+    <button id="langFR" onclick="switchLang('fr')" style="flex:1;padding:8px 16px;border-radius:36px;border:none;font-family:'Outfit',sans-serif;font-size:0.88rem;font-weight:600;cursor:pointer;transition:all 0.2s;background:var(--accent);color:#000">🇫🇷 French</button>
+    <button id="langES" onclick="switchLang('es')" style="flex:1;padding:8px 16px;border-radius:36px;border:none;font-family:'Outfit',sans-serif;font-size:0.88rem;font-weight:600;cursor:pointer;transition:all 0.2s;background:transparent;color:var(--text2)">🇪🇸 Spanish</button>
+  </div>
+  <div class="profiles-label">Who's studying?</div>
+  <div class="profiles-grid" id="profilesGrid"></div>
+  <button class="add-profile-btn" id="addProfileBtn">＋ Add profile</button>
+  <div class="add-form" id="addForm">
+    <input type="text" id="nameInput" placeholder="Name" maxlength="16"
+      autocomplete="off" autocorrect="off" autocapitalize="words" spellcheck="false"
+      enterkeyhint="done" inputmode="text">
+    <span class="colors-label">Pick a colour</span>
+    <div class="colors" id="colorPicker"></div>
+    <div class="form-btns">
+      <button class="btn btn-ghost" id="cancelAdd">Cancel</button>
+      <button class="btn btn-primary" id="saveProfile">Save</button>
+    </div>
+  </div>
+</div>
+
+<!-- MENU SCREEN -->
+<div class="screen hidden" id="menuScreen">
+  <div class="top-bar">
+    <button class="back-btn" id="menuBack">←</button>
+    <div class="user-info">
+      <div class="user-avatar" id="menuAvatar"></div>
+      <span class="user-name" id="menuName"></span> <span id="menuLangFlag" style="font-size:1rem"></span>
+    </div>
+    <button class="back-btn" id="menuSettingsBtn" title="Settings" style="font-size:1.1rem" onclick="toggleSettings()">⚙️</button>
+    <button class="back-btn" id="menuProgressBtn" title="Progress" style="font-size:1.1rem">📊</button>
+    <button class="back-btn" id="menuAdminBtn" title="Feedback admin" style="font-size:1.1rem;display:none">💬</button>
+  </div>
+  <div class="menu-body" id="menuBody" tabindex="0">
+    <!-- Daily Goal Card -->
+    <div class="daily-goal-card" id="dailyGoalCard" onclick="startTodaysGoal()">
+      <div class="daily-goal-ring">
+        <svg width="56" height="56" viewBox="0 0 56 56">
+          <circle class="daily-goal-ring-bg" cx="28" cy="28" r="24"/>
+          <circle class="daily-goal-ring-fill" id="goalRingFill" cx="28" cy="28" r="24"
+            stroke-dasharray="150.8" stroke-dashoffset="150.8"/>
+        </svg>
+        <div class="daily-goal-ring-text">
+          <div class="daily-goal-count" id="goalCount">0</div>
+          <div class="daily-goal-total">/20</div>
+        </div>
+      </div>
+      <div class="daily-goal-info">
+        <div class="daily-goal-title">
+          Today's Goal
+          <span class="streak-badge" id="streakBadge">🔥 0</span>
+        </div>
+        <div class="daily-goal-sub" id="goalSubtext">Tap to start — balanced across all themes</div>
+      </div>
+    </div>
+    <!-- Weekly Calendar -->
+    <div class="weekly-cal" id="weeklyCal"></div>
+    <!-- Trophy Road -->
+    <div class="trophy-road">
+      <div class="trophy-road-header">
+        <div class="trophy-road-label">🛂 Passport</div>
+        <div class="trophy-road-pts">⭐ <span id="rankScore">0</span> pts</div>
+      </div>
+      <div class="trophy-track" id="trophyTrack"></div>
+      <div class="trophy-road-bar"><div class="trophy-road-bar-fill" id="trophyBarFill" style="width:0%"></div></div>
+      <div class="trophy-road-status">
+        <div class="trophy-road-rank" id="trophyRankName"></div>
+        <div class="trophy-road-next" id="trophyRoadNext"></div>
+      </div>
+    </div>
+    <!-- Compact stats 2x2 -->
+    <div style="font-size:0.62rem;text-transform:uppercase;letter-spacing:0.08em;color:var(--text3);margin-bottom:4px;padding-left:2px">Current Stats</div>
+    <div class="stats-row">
+      <div class="stat-card"><div class="stat-val" style="color:var(--green)" id="statLearned">0</div><div class="stat-label">⭐ Mastered</div></div>
+      <div class="stat-card"><div class="stat-val" style="color:var(--accent)" id="statToday">0</div><div class="stat-label">📈 Today</div></div>
+      <div class="stat-card"><div class="stat-val" style="color:var(--red)" id="statHard">0</div><div class="stat-label">💪 Hard</div></div>
+      <div class="stat-card"><div class="stat-val" style="color:var(--gold)" id="statStreak">0</div><div class="stat-label">🔥 Streak</div></div>
+    </div>
+
+    <!-- Settings panel (opened via ⚙️ in top bar) -->
+    <div class="settings-panel" id="settingsPanel" style="display:none">
+      <div class="settings-section-label">Select Language Direction</div>
+      <div class="settings-hint">Choose whether to study French→English, English→French, or both ways.</div>
+      <div id="dirChips"></div>
+      <div class="settings-section-label" style="margin-top:12px">Select Tier</div>
+      <div class="settings-hint">Foundation covers the core 1,010 words. Higher adds 393 more challenging words.</div>
+      <div class="filter-row" id="tierChips"></div>
+      <div class="settings-section-label" style="margin-top:12px">Select Units</div>
+      <div class="settings-hint">Tap to select the units you want to study. Tap again to deselect.</div>
+      <div class="filter-card" style="margin-bottom:6px">
+        <div class="filter-card-title">Theme 1 — People &amp; Lifestyle</div>
+        <div class="filter-row" id="t1chips"></div>
+      </div>
+      <div class="filter-card" style="margin-bottom:6px">
+        <div class="filter-card-title">Theme 2 — Popular Culture</div>
+        <div class="filter-row" id="t2chips"></div>
+      </div>
+      <div class="filter-card">
+        <div class="filter-card-title">Theme 3 — Communication &amp; the World</div>
+        <div class="filter-row" id="t3chips"></div>
+      </div>
+      <div class="settings-reset-row">
+        <button class="settings-reset-btn" id="resetProgress">⚠️ Reset my progress</button>
+      </div>
+      <div class="settings-reset-confirm hidden" id="resetConfirm">
+        <div class="settings-reset-warning">This will permanently delete all progress for <strong id="resetProfileName"></strong>. This cannot be undone.</div>
+        <div class="settings-reset-btns">
+          <button class="btn btn-ghost" id="resetCancel">Cancel</button>
+          <button class="btn settings-reset-confirm-btn" id="resetConfirmBtn">Yes, reset everything</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-label">Study Mode</div>
+    <div class="mode-card" id="modeHard">
+      <div class="mode-icon" style="background:rgba(248,81,73,0.12)">💪</div>
+      <div class="mode-info">
+        <div class="mode-title">Hard Words</div>
+        <div class="mode-desc">Only words you've struggled with. Master your weak spots.</div>
+      </div>
+      <div class="mode-count" id="hardCount" style="display:none">–</div>
+    </div>
+
+    <div class="mode-card" id="modeDrill">
+      <div class="mode-icon" style="background:rgba(63,185,80,0.12)">✍️</div>
+      <div class="mode-info">
+        <div class="mode-title">Adjective Drill</div>
+        <div class="mode-desc">Type the full French phrase with correct gender agreement.</div>
+      </div>
+      <div class="mode-count" style="display:none">typed</div>
+    </div>
+    <div class="mode-card" id="modeFaux">
+      <div class="mode-icon" style="background:rgba(248,81,73,0.12)">🪤</div>
+      <div class="mode-info">
+        <div class="mode-title">Faux Amis</div>
+        <div class="mode-desc">Spot the false friend trap. Don't be fooled by similar-looking words!</div>
+      </div>
+      <div class="mode-count" id="fauxCount" style="display:none">–</div>
+    </div>
+    <div class="mode-card" id="modeTime">
+      <div class="mode-icon" style="background:rgba(188,140,255,0.12)">⏱</div>
+      <div class="mode-info">
+        <div class="mode-title">Time Expressions</div>
+        <div class="mode-desc">Recognise tense signals when reading. Recall them grouped by tense when writing.</div>
+      </div>
+      <div class="mode-count" id="timeCount" style="display:none">–</div>
+    </div>
+    <div class="mode-card" id="modeSyn">
+      <div class="mode-icon" style="background:rgba(188,140,255,0.12)">🔗</div>
+      <div class="mode-info">
+        <div class="mode-title">Synonyms</div>
+        <div class="mode-desc">Given an English meaning, recall all French synonyms in the group. Learn the nuances.</div>
+      </div>
+      <div class="mode-count" id="synCount" style="display:none">–</div>
+    </div>
+
+    <div class="mode-card" id="modeExpr">
+      <div class="mode-icon" style="background:rgba(247,129,102,0.12)">🐓</div>
+      <div class="mode-info">
+        <div class="mode-title">Funny Expressions</div>
+        <div class="mode-desc">Hilarious French phrases that make no sense word-for-word. Can you guess what they mean?</div>
+      </div>
+      <div class="mode-count" style="display:none">30</div>
+    </div>
+
+    <!-- Exam Practice — distinct card, last in list -->
+    <div class="mode-card" id="modeSpeaking" style="background:linear-gradient(135deg,rgba(227,179,65,0.08),rgba(227,179,65,0.04));border:1.5px solid rgba(227,179,65,0.35);margin-top:4px">
+      <div class="mode-icon" style="background:rgba(227,179,65,0.15);font-size:1.3rem">🎤</div>
+      <div class="mode-info">
+        <div class="mode-title" style="color:var(--gold)">Exam Practice</div>
+        <div class="mode-desc">Simulate the real AQA speaking exam — role plays, reading aloud and photo cards. Full candidate card format.</div>
+      </div>
+      <div style="font-size:0.6rem;color:var(--gold);font-weight:700;letter-spacing:0.06em;text-transform:uppercase;flex-shrink:0">AQA<br>Paper 2</div>
+    </div>
+
+  </div>
+</div>
+
+<!-- SPEAKING PRACTICE SCREEN -->
+<div class="screen hidden" id="speakScreen">
+  <div class="speak-screen" style="position:relative">
+    <div class="top-bar" style="justify-content:flex-start;gap:10px;position:relative;z-index:10">
+      <button class="back-btn" id="speakBack" style="font-size:1.3rem">←</button>
+      <span class="speak-top-title" style="flex:1">🎤 Exam Practice</span>
+      <button class="speak-tips-btn" id="speakTipsBtn" onclick="toggleSpeakTips()">💡 SPALMA / SORE</button>
+    </div>
+    <div class="speak-body" id="speakBody" tabindex="0"></div>
+    <div id="speakTipsOverlay" style="display:none" class="speak-tips-overlay">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+        <span style="font-size:0.85rem;font-weight:600;color:var(--text)">Exam Tips</span>
+        <button onclick="toggleSpeakTips()" style="background:none;border:none;color:var(--text2);font-size:1.2rem;cursor:pointer">×</button>
+      </div>
+      <div class="speak-tips-tab-row" style="flex-wrap:wrap">
+        <button class="speak-tips-tab active" id="tipTabSpalma" onclick="setTipTab('spalma')">🖼️ SPALMA — Photo Card</button>
+        <button class="speak-tips-tab" id="tipTabSore" onclick="setTipTab('sore')">📖 SORE — Read Aloud</button>
+      </div>
+      <div id="tipPanelSpalma"></div>
+      <div id="tipPanelSore" style="display:none"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ADMIN SCREEN -->
+<div class="screen hidden" id="adminScreen">
+  <div class="admin-top">
+    <button class="back-btn" id="adminBack">←</button>
+    <div class="user-info">
+      <span style="font-size:0.75rem;text-transform:uppercase;letter-spacing:0.1em;color:var(--text2)">💬 Feedback</span>
+    </div>
+    <div style="width:32px"></div>
+  </div>
+  <div class="admin-body">
+    <div class="admin-stats-row">
+      <div class="admin-stat"><div class="admin-stat-val" id="adminStatNew">0</div><div class="admin-stat-lab">New</div></div>
+      <div class="admin-stat"><div class="admin-stat-val" id="adminStatResolved">0</div><div class="admin-stat-lab">Resolved</div></div>
+      <div class="admin-stat"><div class="admin-stat-val" id="adminStatTotal">0</div><div class="admin-stat-lab">Total</div></div>
+    </div>
+    <select class="admin-filter" id="adminFilter" onchange="renderAdminFeedback()">
+      <option value="all">All categories</option>
+      <option value="Suggestion">Suggestion</option>
+      <option value="Bug report">Bug report</option>
+      <option value="Content issue">Content issue</option>
+      <option value="Other">Other</option>
+    </select>
+    <div id="adminGroups"></div>
+    <div class="admin-empty" id="adminEmpty" style="display:none">No feedback items match this filter.</div>
+  </div>
+</div>
+
+<!-- STUDY SCREEN -->
+<div class="screen hidden" id="studyScreen">
+  <div class="study-top">
+    <button class="back-btn" id="studyBack" style="position:fixed;top:14px;left:18px;z-index:500;background:var(--bg);border:none;color:var(--text2);cursor:pointer;font-size:1.3rem;padding:8px;border-radius:8px">←</button>
+    <div style="display:flex;gap:8px;align-items:center;margin-left:40px">
+      <div class="mode-badge" id="studyModeBadge">Flashcards</div>
+      <div class="mode-badge" id="studyStreakBadge" style="display:none"></div>
+      <div class="mode-badge" id="studyModeBadge2" style="display:none"></div>
+      <div class="mode-badge" id="studyDirBadge" style="font-size:0.85rem">🇫🇷 French → 🇬🇧 English</div>
+    </div>
+    <div class="queue-info" id="queueInfo"></div>
+  </div>
+  <div class="prog-wrap">
+    <div class="prog-bar">
+      <div class="prog-fill" id="progFill" style="width:0%"></div>
+      <div class="prog-fill-wrong" id="progFillWrong" style="width:0%"></div>
+    </div>
+    <div class="prog-text" id="progText"></div>
+  </div>
+  <div class="timer-wrap" id="timerWrap">
+    <div class="timer-bar"><div class="timer-fill" id="timerFill" style="width:100%"></div></div>
+    <div class="timer-num" id="timerNum">10</div>
+  </div>
+  <div class="card-area" id="cardArea">
+    <div class="card-wrap" id="cardWrap" onclick="flipCard()">
+      <div class="card-inner" id="cardInner">
+        <div class="card-face card-front" id="cardFront">
+          <div class="faux-ribbon" id="fauxRibbon">⚠️ False friend — choose carefully!</div>
+          <div class="card-tag" id="frontTag"></div>
+          <div class="card-pos" id="frontPos"></div>
+          <div class="card-word" id="frontWord"></div>
+          <div class="card-hint" id="frontHint"></div>
+          <div class="card-tap" id="cardTap">Tap to reveal</div>
+          <button class="speak-btn" id="speakBtn" onclick="event.stopPropagation();speakFrench()" title="Hear pronunciation">🔊</button>
+          <div class="hard-dot" id="hardDot" style="display:none"></div>
+        </div>
+        <div class="card-face card-back" id="cardBack">
+          <div class="card-tag" id="backTag"></div>
+          <div class="card-word" id="backWord"></div>
+          <div class="card-hint" id="backHint"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="answer-area hidden" id="answerArea">
+    <button class="ans-btn btn-wrong" id="btnWrong">✗ Wrong<span class="lbl">see it again soon</span></button>
+    <button class="ans-btn btn-right" id="btnRight">✓ Got it<span class="lbl">well done!</span></button>
+  </div>
+  <div class="faux-dir-toggle" id="fauxDirToggle" style="display:none;margin-bottom:4px">
+    <button class="faux-dir-btn active" id="fauxDirFwd">🇫🇷 French → 🇬🇧 English French to English</button>
+    <button class="faux-dir-btn" id="fauxDirRev">🇬🇧 English → 🇫🇷 French English to French</button>
+  </div>
+  <div class="mcq-area hidden" id="mcqArea">
+    <button class="mcq-btn" id="mcqBtn0"></button>
+    <button class="mcq-btn" id="mcqBtn1"></button>
+    <button class="mcq-btn" id="mcqBtn2"></button>
+    <button class="mcq-btn" id="mcqBtn3"></button>
+    <div class="mcq-explanation" id="mcqExplanation"></div>
+    <button class="mcq-next" id="mcqNext">Next →</button>
+  </div>
+</div>
+
+<!-- RESULTS SCREEN -->
+<div class="screen hidden" id="resultsScreen">
+  <div class="results-card">
+    <div class="results-emoji" id="resultsEmoji">🎉</div>
+    <div class="results-title" id="resultsTitle">Round Complete!</div>
+    <div class="results-sub" id="resultsSub"></div>
+    <div class="results-stats">
+      <div class="rs"><div class="rs-val" style="color:var(--green)" id="rCorrect">0</div><div class="rs-lab">Correct</div></div>
+      <div class="rs"><div class="rs-val" style="color:var(--red)" id="rWrong">0</div><div class="rs-lab">Wrong</div></div>
+      <div class="rs"><div class="rs-val" style="color:var(--gold)" id="rScore">0%</div><div class="rs-lab">Score</div></div>
+    </div>
+    <div class="results-btns">
+      <button class="btn btn-primary" id="rPlayAgain">Play Again</button>
+      <button class="btn btn-outline" id="rMenu">Back to Menu</button>
+    </div>
+    <div class="results-expr-teaser" id="resultsExprTeaser">
+      <div class="results-expr-label">🐓 Expression du jour</div>
+      <div class="results-expr-fr" id="rExprFr"></div>
+      <div class="results-expr-lit" id="rExprLit"></div>
+      <div class="results-expr-mean" id="rExprMean"></div>
+    </div>
+  </div>
+</div>
+
+<!-- EXPRESSIONS SCREEN -->
+<div class="screen hidden" id="exprScreen">
+  <div class="top-bar">
+    <button class="back-btn" id="exprBack">←</button>
+    <div class="user-info">
+      <span style="font-size:0.75rem;text-transform:uppercase;letter-spacing:0.1em;color:var(--text2)">🐓 Funny Expressions</span>
+    </div>
+    <div style="width:32px"></div>
+  </div>
+  <div class="expr-body" id="exprBody" tabindex="0">
+    <!-- Mode toggle -->
+    <div class="expr-mode-bar">
+      <button class="expr-mode-btn active" id="exprModeBrowse">🃏 Flashcard</button>
+      <button class="expr-mode-btn" id="exprModeList">📋 All</button>
+    </div>
+
+    <!-- Browse panel -->
+    <div id="exprBrowsePanel">
+      <div class="expr-counter" id="exprCounter">1 / 30</div>
+      <div class="expr-card-wrap" id="exprCardWrap" onclick="flipExprCard()" style="cursor:pointer;perspective:1200px;width:100%;isolation:isolate">
+        <div class="expr-card-inner" id="exprCardInner" style="position:relative;width:100%;transform-style:preserve-3d;transition:transform 0.5s cubic-bezier(0.4,0,0.2,1);min-height:200px">
+          <div class="expr-card" id="exprCard" style="backface-visibility:hidden;-webkit-backface-visibility:hidden;min-height:200px;justify-content:center">
+            <div style="font-size:0.62rem;text-transform:uppercase;letter-spacing:0.1em;color:var(--text3);margin-bottom:6px;text-align:center">🐓 tap to reveal the meaning</div>
+            <div class="expr-french" id="exprFrench"></div>
+            <div class="expr-literal-label">Literally…</div>
+            <div class="expr-literal" id="exprLiteral"></div>
+          </div>
+          <div style="position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;transform:rotateY(180deg);background:linear-gradient(145deg,#0d2016,#112b1c);border:1px solid rgba(63,185,80,0.18);border-radius:var(--radius);padding:24px 20px;display:flex;flex-direction:column;gap:10px;justify-content:center">
+            <div style="font-size:0.65rem;text-transform:uppercase;letter-spacing:0.1em;color:rgba(63,185,80,0.7);margin-bottom:4px">✅ Actually means:</div>
+            <div class="expr-meaning" id="exprMeaning" style="color:var(--green);font-weight:600;font-size:0.95rem;line-height:1.5"></div>
+            <div class="expr-tag" id="exprTag"></div>
+          </div>
+        </div>
+      </div>
+      <div class="expr-nav">
+        <button class="expr-nav-btn" id="exprPrev">← Prev</button>
+        <button class="expr-nav-btn expr-nav-next" id="exprNext">Next →</button>
+      </div>
+    </div>
+
+    <!-- List panel -->
+    <div id="exprListPanel" style="display:none">
+      <div id="exprListBody"></div>
+    </div>
+  </div>
+</div>
+
+<!-- PROGRESS SCREEN -->
+<div class="screen hidden" id="progressScreen">
+  <div class="top-bar">
+    <button class="back-btn" id="progressBack">←</button>
+    <div class="user-info">
+      <span style="font-size:0.75rem;text-transform:uppercase;letter-spacing:0.1em;color:var(--text2)">📊 Progress</span>
+    </div>
+    <div style="width:32px"></div>
+  </div>
+  <div class="prog-screen-body" id="progScreenBody" tabindex="0">
+    <!-- built dynamically -->
+  </div>
+</div>
+
+<!-- SYNONYM DRILL SCREEN -->
+<div class="screen hidden" id="synScreen">
+  <div class="top-bar">
+    <button class="back-btn" id="synBack">←</button>
+    <div class="user-info">
+      <span style="font-size:0.75rem;text-transform:uppercase;letter-spacing:0.1em;color:var(--text2)">🔗 Synonym Groups</span>
+    </div>
+    <div style="width:32px"></div>
+  </div>
+  <div class="syn-body" id="synBody" tabindex="0">
+
+    <div class="syn-stats-row">
+      <div class="syn-stat"><div class="syn-stat-val" style="color:var(--green)" id="ssCorrect">0</div><div class="syn-stat-lab">Correct</div></div>
+      <div class="syn-stat"><div class="syn-stat-val" style="color:var(--red)" id="ssWrong">0</div><div class="syn-stat-lab">Wrong</div></div>
+      <div class="syn-stat"><div class="syn-stat-val" style="color:var(--gold)" id="ssStreak">0</div><div class="syn-stat-lab">Streak</div></div>
+      <div class="syn-stat"><div class="syn-stat-val" style="color:var(--purple)" id="ssGroup">1</div><div class="syn-stat-lab">Group</div></div>
+    </div>
+
+    <div class="syn-prompt-card">
+      <div class="syn-prompt-label">Recall all French synonyms for:</div>
+      <div class="syn-prompt-en" id="synPromptEn">to leave</div>
+      <div class="syn-count-badge" id="synCountBadge">2 synonyms</div>
+    </div>
+
+    <div class="syn-targets" id="synTargets"></div>
+
+    <div class="syn-accent-bar">
+      <span style="font-size:0.68rem;color:var(--text3);margin-right:4px">Insert:</span>
+      <button class="accent-btn" data-char="à">à</button>
+      <button class="accent-btn" data-char="â">â</button>
+      <button class="accent-btn" data-char="é">é</button>
+      <button class="accent-btn" data-char="è">è</button>
+      <button class="accent-btn" data-char="ê">ê</button>
+      <button class="accent-btn" data-char="î">î</button>
+      <button class="accent-btn" data-char="ô">ô</button>
+      <button class="accent-btn" data-char="ù">ù</button>
+      <button class="accent-btn" data-char="û">û</button>
+      <button class="accent-btn" data-char="ç">ç</button>
+      <button class="accent-btn" data-char="œ">œ</button>
+    </div>
+
+    <div class="syn-input-row">
+      <input type="text" id="synInput" class="syn-input"
+        placeholder="Type a French synonym…"
+        autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false"
+        enterkeyhint="go" inputmode="text">
+      <button class="syn-check-btn" id="synCheckBtn">Check</button>
+    </div>
+
+    <div class="syn-feedback" id="synFeedback"></div>
+    <div class="syn-note-box" id="synNoteBox"></div>
+    <button class="syn-next-btn" id="synNextBtn">Next group →</button>
+
+  </div>
+</div>
+
+<!-- TIME EXPRESSIONS SCREEN -->
+<div class="screen hidden" id="timeScreen">
+  <div class="top-bar">
+    <button class="back-btn" id="timeBack">←</button>
+    <div class="user-info">
+      <span style="font-size:0.75rem;text-transform:uppercase;letter-spacing:0.1em;color:var(--text2)">⏱ Time Expressions</span>
+    </div>
+    <div style="width:32px"></div>
+  </div>
+  <div class="time-body" id="timeBody" tabindex="0">
+    <div class="time-mode-bar">
+      <button class="time-mode-btn active" id="timeModeRecog">🔍 Recognise Mode</button>
+      <button class="time-mode-btn" id="timeModeRecall">📋 Recall Mode</button>
+    </div>
+
+    <!-- RECOGNITION MODE -->
+    <div id="timeRecogPanel" class="time-inner">
+      <div class="time-prog-row">
+        <div class="time-stat"><div class="time-stat-val" style="color:var(--green)" id="trCorrect">0</div><div class="time-stat-lab">Correct</div></div>
+        <div class="time-stat"><div class="time-stat-val" style="color:var(--red)" id="trWrong">0</div><div class="time-stat-lab">Wrong</div></div>
+        <div class="time-stat"><div class="time-stat-val" style="color:var(--gold)" id="trStreak">0</div><div class="time-stat-lab">Streak</div></div>
+        <div class="time-stat"><div class="time-stat-val" style="color:var(--purple)" id="trPB">–</div><div class="time-stat-lab">Best</div></div>
+      </div>
+      <div class="time-card">
+        <div class="time-card-label">Which tense(s) does this signal?</div>
+        <div class="time-card-word" id="trWord">hier</div>
+        <div class="time-card-en" id="trEn">yesterday</div>
+      </div>
+      <div class="time-tense-options" id="trOptions"></div>
+      <div class="time-note" id="trNote"></div>
+      <button class="time-next-btn" id="trNextBtn">Next →</button>
+    </div>
+
+    <!-- RECALL MODE -->
+    <div id="timeRecallPanel" class="time-inner" style="display:none">
+      <p style="font-size:0.82rem;color:var(--text2);line-height:1.5">Tap a tense to expand all its time expressions. Use this to revise which phrases to use when writing in each tense.</p>
+      <div id="recallSections"></div>
+    </div>
+  </div>
+</div>
+
+<!-- DRILL SCREEN -->
+<div class="screen hidden" id="drillScreen">
+  <div class="top-bar">
+    <button class="back-btn" id="drillBack">←</button>
+    <div class="user-info">
+      <span style="font-size:0.75rem;text-transform:uppercase;letter-spacing:0.1em;color:var(--text2)">✍️ Adjective Drill</span>
+    </div>
+    <div style="width:32px"></div>
+  </div>
+  <div class="drill-body" id="drillBody" tabindex="0">
+
+    <div class="drill-stats-row">
+      <div class="drill-stat"><div class="drill-stat-val" style="color:var(--green)" id="dCorrect">0</div><div class="drill-stat-lab">Correct</div></div>
+      <div class="drill-stat"><div class="drill-stat-val" style="color:var(--red)" id="dWrong">0</div><div class="drill-stat-lab">Wrong</div></div>
+      <div class="drill-stat"><div class="drill-stat-val" style="color:var(--gold)" id="dStreak">0</div><div class="drill-stat-lab">Streak</div></div>
+    </div>
+
+    <div class="drill-prompt-card">
+      <div class="drill-prompt-label">Translate into French</div>
+      <div class="drill-prompt-en" id="drillPromptEn">a green car</div>
+      <div class="drill-prompt-hint" id="drillPromptHint"></div>
+    </div>
+
+    <div class="drill-accent-notice">
+      <span>⚠️</span>
+      <span>Accents are required and checked strictly — é ≠ e. Use the buttons below or long-press your keyboard.</span>
+    </div>
+
+    <div class="drill-accent-bar">
+      <span class="drill-accent-label">Insert:</span>
+      <button class="accent-btn" data-char="à">à</button>
+      <button class="accent-btn" data-char="â">â</button>
+      <button class="accent-btn" data-char="é">é</button>
+      <button class="accent-btn" data-char="è">è</button>
+      <button class="accent-btn" data-char="ê">ê</button>
+      <button class="accent-btn" data-char="ë">ë</button>
+      <button class="accent-btn" data-char="î">î</button>
+      <button class="accent-btn" data-char="ï">ï</button>
+      <button class="accent-btn" data-char="ô">ô</button>
+      <button class="accent-btn" data-char="ù">ù</button>
+      <button class="accent-btn" data-char="û">û</button>
+      <button class="accent-btn" data-char="ü">ü</button>
+      <button class="accent-btn" data-char="ç">ç</button>
+      <button class="accent-btn" data-char="œ">œ</button>
+      <button class="accent-btn" data-char="æ">æ</button>
+    </div>
+
+    <div class="drill-input-row">
+      <input type="text" id="drillInput" class="drill-input"
+        placeholder="Type your answer…"
+        autocomplete="off" autocorrect="off" autocapitalize="none"
+        spellcheck="false" autocomplete="new-password"
+        enterkeyhint="go" inputmode="text">
+      <button class="drill-check-btn" id="drillCheckBtn">Check →</button>
+    </div>
+
+    <div class="drill-feedback" id="drillFeedback"></div>
+
+    <button class="drill-next-btn" id="drillNextBtn" style="display:none">Next question →</button>
+
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<!-- FEEDBACK FAB -->
+<button class="feedback-fab hidden" id="feedbackFab" onclick="openFeedbackModal()" title="Share feedback">
+  <svg viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+  </svg>
+</button>
+
+<!-- FEEDBACK MODAL -->
+<div class="fb-modal-bg" id="fbModalBg" onclick="closeFeedbackOutside(event)">
+  <div class="fb-modal">
+    <button class="fb-modal-close" onclick="closeFeedbackModal()">×</button>
+    <div class="fb-modal-title">Share feedback</div>
+    <div class="fb-modal-sub">Help improve the app — flag an issue, make a suggestion, or ask a question.</div>
+    <div class="fb-page-pill">
+      <span class="fb-page-pill-label">Page</span>
+      <span class="fb-page-pill-value" id="fbPageContext">Menu</span>
+    </div>
+    <label>Category</label>
+    <select id="fbCategory">
+      <option>Suggestion</option>
+      <option>Bug report</option>
+      <option>Content issue</option>
+      <option>Other</option>
+    </select>
+    <label>Your feedback <span style="text-transform:none;font-size:0.7rem;color:var(--text3)">(max 200 words)</span></label>
+    <textarea id="fbText" placeholder="Tell us what you think…"
+      autocorrect="off" spellcheck="true" enterkeyhint="done"
+      oninput="fbUpdateCount()"></textarea>
+    <div class="fb-word-count" id="fbWordCount">0 / 200 words</div>
+    <div class="fb-modal-actions">
+      <button class="fb-btn-cancel" onclick="closeFeedbackModal()">Cancel</button>
+      <button class="fb-btn-submit" id="fbSubmitBtn" onclick="submitFeedback()" disabled>Submit</button>
+    </div>
+  </div>
+</div>
+
+
+<script src="app.js"></script>
+<script>
+(function(){
+  if(!/iphone|ipad|ipod/i.test(navigator.userAgent)||window.navigator.standalone||localStorage.getItem("pwa_fr"))return;
+  setTimeout(function(){
+    var d=document.createElement("div");
+    d.style.cssText="position:fixed;bottom:0;left:0;right:0;z-index:9999;background:#1c2128;border-top:1px solid rgba(255,255,255,.1);padding:12px 16px 30px;display:flex;align-items:center;gap:12px;font-family:system-ui,sans-serif";
+    d.innerHTML='<div style="flex:1"><b style="font-size:.85rem;color:#e6edf3">Add to Home Screen</b><div style="font-size:.73rem;color:#8b949e;margin-top:2px">Tap Share then Add to Home Screen to install French GCSE as an app</div></div><button id="pwax" style="background:none;border:none;color:#8b949e;font-size:1.4rem;cursor:pointer;padding:4px">x</button>';
+    document.body.appendChild(d);
+    document.getElementById("pwax").onclick=function(){d.remove();localStorage.setItem("pwa_fr","1");};
+  },2500);
+})();
+</script>
+<script>
+(function(){
+var _VF=VOCAB.slice(),_NP=DRILL_NOUNS_PERSON.slice(),_NG=DRILL_NOUNS_GENERAL.slice();
+var _DA=DRILL_ADJS.slice(),_EX=EXPRESSIONS.slice(),_TE=TIME_EXPRESSIONS.slice();
+var VES=[{f:"ser",e:"be",pos:"v",u:1,t:"F"},
+{f:"no",e:"no, not",pos:"adv",u:1,t:"F"},
+{f:"haber",e:"have",pos:"v",u:1,t:"F"},
+{f:"¿Por qué?",e:"Why?",pos:"adv",u:1,t:"F"},
+{f:"tener",e:"have",pos:"v",u:1,t:"F"},
+{f:"estar",e:"be",pos:"v",u:1,t:"F"},
+{f:"más (…que)*",e:"adv + -er , more",pos:"adv",u:1,t:"F"},
+{f:"hacer",e:"do, make",pos:"v",u:1,t:"F"},
+{f:"decir",e:"say, tell",pos:"v",u:1,t:"F"},
+{f:"poder",e:"be able to, can",pos:"v",u:1,t:"F"},
+{f:"ir",e:"go",pos:"v",u:1,t:"F"},
+{f:"ver",e:"see, watch",pos:"v",u:1,t:"F"},
+{f:"ya",e:"already",pos:"adv",u:4,t:"F"},
+{f:"mucho(s)",e:"much, a lot",pos:"adj",u:1,t:"F"},
+{f:"dar",e:"give",pos:"v",u:1,t:"F"},
+{f:"muy",e:"very, really",pos:"adv",u:1,t:"F"},
+{f:"saber",e:"know",pos:"v",u:1,t:"F"},
+{f:"sí",e:"yes",pos:"adv",u:1,t:"F"},
+{f:"año",e:"year",pos:"n",u:1,t:"F",g:"m"},
+{f:"también",e:"also, too, as well",pos:"adv",u:1,t:"F"},
+{f:"querer",e:"want , love",pos:"v",u:1,t:"F"},
+{f:"vez; a veces",e:"time",pos:"n",u:1,t:"F",g:"f"},
+{f:"dos",e:"two",pos:"n",u:1,t:"F"},
+{f:"día",e:"day",pos:"n",u:1,t:"F",g:"m"},
+{f:"grande",e:"big, large",pos:"adj",u:1,t:"F"},
+{f:"gran",e:"big, great",pos:"adj",u:2,t:"F"},
+{f:"así",e:"like this, like that",pos:"adv",u:1,t:"F"},
+{f:"pasar",e:"pass, spend , happen I  passing, spending , happening",pos:"v",u:8,t:"F"},
+{f:"cosa",e:"thing",pos:"n",u:1,t:"F",g:"f"},
+{f:"deber",e:"have to, must",pos:"v",u:1,t:"F"},
+{f:"entonces",e:"then, so",pos:"adv",u:1,t:"F"},
+{f:"poco(s)",e:"little, not much",pos:"adj",u:1,t:"F"},
+{f:"bien",e:"well",pos:"adv",u:1,t:"F"},
+{f:"tiempo",e:"time , weather",pos:"n",u:2,t:"F",g:"m"},
+{f:"ahora",e:"now, these days",pos:"adv",u:1,t:"F"},
+{f:"primero",e:"first",pos:"adj",u:1,t:"F"},
+{f:"primer",e:"first",pos:"adj",u:1,t:"F"},
+{f:"creer",e:"believe, think I believing, thinking",pos:"v",u:1,t:"F"},
+{f:"vida",e:"life",pos:"n",u:1,t:"F",g:"f"},
+{f:"tanto(s)",e:"so much + noun, so much",pos:"adj",u:1,t:"F"},
+{f:"hablar",e:"speak, talk  I speaking, talking",pos:"v",u:1,t:"F"},
+{f:"poner; ponerse",e:"put I putting",pos:"v",u:1,t:"F"},
+{f:"nuevo",e:"new, another , new, newly-made",pos:"adj",u:1,t:"F"},
+{f:"solo*",e:"only, just",pos:"adv",u:1,t:"F"},
+{f:"siempre",e:"always, forever",pos:"adv",u:1,t:"F"},
+{f:"hombre",e:"man",pos:"n",u:1,t:"F",g:"m"},
+{f:"seguir",e:"follow I following",pos:"v",u:1,t:"F"},
+{f:"llevar; llevarse",e:"take, carry, wear, lead I taking, carrying, wearing, leading",pos:"v",u:1,t:"F"},
+{f:"encontrar",e:"find",pos:"v",u:1,t:"F"},
+{f:"bueno",e:"good",pos:"adj",u:1,t:"F"},
+{f:"buen",e:"good",pos:"adj",u:1,t:"F"},
+{f:"tan",e:"so",pos:"adv",u:1,t:"F"},
+{f:"pensar",e:"think",pos:"v",u:1,t:"F"},
+{f:"casa",e:"house",pos:"n",u:1,t:"F",g:"f"},
+{f:"persona",e:"person",pos:"n",u:1,t:"F",g:"f"},
+{f:"país",e:"country",pos:"n",u:1,t:"F",g:"m"},
+{f:"salir",e:"go out, leave",pos:"v",u:1,t:"F"},
+{f:"después; después de (+ infinitive)",e:"after, afterwards",pos:"adv",u:1,t:"F"},
+{f:"mejor**",e:"better",pos:"adv",u:1,t:"F"},
+{f:"menos (…que)*",e:"less",pos:"adv",u:1,t:"F"},
+{f:"venir",e:"come",pos:"v",u:1,t:"F"},
+{f:"mujer",e:"woman, wife",pos:"n",u:1,t:"F",g:"f"},
+{f:"momento; de momento",e:"moment",pos:"n",u:1,t:"F",g:"m"},
+{f:"llamar; llamarse",e:"call, name",pos:"v",u:1,t:"F"},
+{f:"mundo",e:"world",pos:"n",u:1,t:"F",g:"m"},
+{f:"mirar",e:"look, watch",pos:"v",u:1,t:"F"},
+{f:"conocer",e:"know , meet",pos:"v",u:1,t:"F"},
+{f:"aquí",e:"here",pos:"adv",u:1,t:"F"},
+{f:"tomar",e:"take, have, drink",pos:"v",u:2,t:"F"},
+{f:"tres",e:"three",pos:"n",u:1,t:"F"},
+{f:"mano",e:"hand",pos:"n",u:1,t:"F",g:"f"},
+{f:"sentir; sentirse",e:"feel, sense",pos:"v",u:1,t:"F"},
+{f:"gente",e:"people",pos:"n",u:1,t:"F",g:"f"},
+{f:"¿cuándo?",e:"when?",pos:"adv",u:1,t:"F"},
+{f:"hijo",e:"son, child",pos:"n",u:1,t:"F",g:"m"},
+{f:"vivir",e:"live",pos:"v",u:1,t:"F"},
+{f:"lugar",e:"place, position",pos:"n",u:1,t:"F",g:"m"},
+{f:"problema",e:"problem",pos:"n",u:1,t:"F",g:"m"},
+{f:"luego",e:"then, later",pos:"adv",u:1,t:"F"},
+{f:"¿cómo?",e:"how?",pos:"adv",u:1,t:"F"},
+{f:"trabajo",e:"work, job, effort",pos:"n",u:3,t:"F",g:"m"},
+{f:"mayor",e:"larger, older, main",pos:"adj",u:1,t:"F"},
+{f:"además",e:"also, as well, besides",pos:"adv",u:1,t:"F"},
+{f:"acercarse",e:"come closer",pos:"v",u:1,t:"F"},
+{f:"esperar",e:"wait , hope , expect",pos:"v",u:1,t:"F"},
+{f:"nunca, (no) nunca",e:"never",pos:"adv",u:1,t:"F"},
+{f:"cierto",e:"certain, sure, true",pos:"adj",u:1,t:"F"},
+{f:"hora",e:"hour, time",pos:"n",u:1,t:"F",g:"f"},
+{f:"¿dónde?",e:"where?",pos:"adv",u:1,t:"F"},
+{f:"padre; padres",e:"father",pos:"n",u:1,t:"F",g:"m"},
+{f:"gustar",e:"please, be pleasing",pos:"v",u:1,t:"F"},
+{f:"noche; por la noche; esta noche",e:"night, evening",pos:"n",u:1,t:"F",g:"f"},
+{f:"casi",e:"almost, nearly",pos:"adv",u:1,t:"F"},
+{f:"hoy",e:"today, nowadays",pos:"adv",u:1,t:"F"},
+{f:"tipo",e:"type, kind",pos:"n",u:1,t:"F",g:"m"},
+{f:"ojo",e:"eye",pos:"n",u:1,t:"F",g:"m"},
+{f:"importante",e:"important, influential",pos:"adj",u:1,t:"F"},
+{f:"niño",e:"child, little boy",pos:"n",u:1,t:"F",g:"m"},
+{f:"trabajar",e:"work",pos:"v",u:3,t:"F"},
+{f:"empezar",e:"begin, start",pos:"v",u:4,t:"F"},
+{f:"verdad",e:"truth",pos:"n",u:1,t:"F",g:"f"},
+{f:"ciudad",e:"city, town",pos:"n",u:9,t:"F",g:"f"},
+{f:"buscar",e:"look for, fetch",pos:"v",u:1,t:"F"},
+{f:"fin; por fin",e:"end",pos:"n",u:1,t:"F",g:"m"},
+{f:"historia",e:"history, story",pos:"n",u:1,t:"F",g:"f"},
+{f:"ejemplo",e:"example",pos:"n",u:3,t:"F",g:"m"},
+{f:"último",e:"last, final",pos:"adj",u:1,t:"F"},
+{f:"antes; antes de (+ infinitive)",e:"before, beforehand",pos:"adv",u:1,t:"F"},
+{f:"mil",e:"thousand",pos:"n",u:1,t:"F"},
+{f:"palabra",e:"word",pos:"n",u:1,t:"F",g:"f"},
+{f:"perder; perderse",e:"lose, miss",pos:"v",u:1,t:"F"},
+{f:"cuenta",e:"bill, account",pos:"n",u:2,t:"F",g:"f"},
+{f:"allí",e:"there, over there",pos:"adv",u:1,t:"F"},
+{f:"escribir",e:"write",pos:"v",u:1,t:"F"},
+{f:"grupo",e:"group",pos:"n",u:1,t:"F",g:"m"},
+{f:"señor",e:"Mr., man, Sir, gentleman",pos:"n",u:1,t:"F",g:"m"},
+{f:"pequeño",e:"little, small, young",pos:"adj",u:1,t:"F"},
+{f:"agua",e:"water",pos:"n",u:1,t:"F",g:"f"},
+{f:"entrar",e:"enter, go in",pos:"v",u:1,t:"F"},
+{f:"arte",e:"art",pos:"n",u:4,t:"F",g:"m"},
+{f:"leer",e:"read",pos:"v",u:4,t:"F"},
+{f:"amigo",e:"friend",pos:"n",u:1,t:"F",g:"m"},
+{f:"recordar",e:"remember, recall, remind",pos:"v",u:1,t:"F"},
+{f:"morir",e:"die",pos:"v",u:1,t:"F"},
+{f:"único",e:"only  , unique",pos:"adj",u:1,t:"F"},
+{f:"lado",e:"side",pos:"n",u:1,t:"F",g:"m"},
+{f:"nombre",e:"name",pos:"n",u:1,t:"F",g:"m"},
+{f:"recibir",e:"receive",pos:"v",u:1,t:"F"},
+{f:"pedir",e:"ask for",pos:"v",u:1,t:"F"},
+{f:"permitir; permitirse",e:"allow, permit",pos:"v",u:1,t:"F"},
+{f:"preguntar",e:"ask",pos:"v",u:1,t:"F"},
+{f:"social",e:"social",pos:"adj",u:1,t:"F"},
+{f:"segundo",e:"second",pos:"adj",u:1,t:"F"},
+{f:"viejo",e:"old, longstanding , old, elderly",pos:"adj",u:1,t:"F"},
+{f:"madre",e:"mother",pos:"n",u:1,t:"F",g:"f"},
+{f:"entender; entenderse",e:"understand",pos:"v",u:1,t:"F"},
+{f:"libro",e:"book",pos:"n",u:4,t:"F",g:"m"},
+{f:"alto",e:"tall, high, loud",pos:"adj",u:1,t:"F"},
+{f:"cuerpo",e:"body",pos:"n",u:2,t:"F",g:"m"},
+{f:"familia",e:"family",pos:"n",u:1,t:"F",g:"f"},
+{f:"comenzar",e:"start, begin",pos:"v",u:4,t:"F"},
+{f:"presentar",e:"introduce, present",pos:"v",u:1,t:"F"},
+{f:"crear",e:"create",pos:"v",u:2,t:"F"},
+{f:"tema",e:"issue, subject, matter",pos:"n",u:3,t:"F",g:"m"},
+{f:"cuatro",e:"four",pos:"n",u:1,t:"F"},
+{f:"pueblo",e:"village, small town",pos:"n",u:2,t:"F",g:"m"},
+{f:"producir",e:"produce, cause",pos:"v",u:1,t:"F"},
+{f:"abrir; abrirse",e:"open, unwrap",pos:"v",u:8,t:"F"},
+{f:"idea",e:"idea",pos:"n",u:1,t:"F",g:"f"},
+{f:"millón",e:"million",pos:"n",u:2,t:"F"},
+{f:"caer; caerse",e:"fall",pos:"v",u:1,t:"F"},
+{f:"voz",e:"voice",pos:"n",u:1,t:"F",g:"f"},
+{f:"terminar",e:"finish, end",pos:"v",u:1,t:"F"},
+{f:"cambiar; cambiarse",e:"change",pos:"v",u:1,t:"F"},
+{f:"tierra",e:"earth, land, ground",pos:"n",u:4,t:"F",g:"f"},
+{f:"español",e:"Spanish",pos:"adj",u:1,t:"F"},
+{f:"cabeza",e:"head",pos:"n",u:2,t:"F",g:"f"},
+{f:"mantener; mantenerse",e:"keep, maintain",pos:"v",u:1,t:"F"},
+{f:"calle",e:"street",pos:"n",u:1,t:"F",g:"f"},
+{f:"relación",e:"relationship",pos:"n",u:1,t:"F",g:"f"},
+{f:"sacar",e:"take out, get, obtain",pos:"v",u:1,t:"F"},
+{f:"puerta",e:"door",pos:"n",u:1,t:"F",g:"f"},
+{f:"necesitar",e:"need",pos:"v",u:1,t:"F"},
+{f:"luz",e:"light, electricity",pos:"n",u:9,t:"F",g:"f"},
+{f:"paso",e:"step, pace, religious image carried in Holy Week processions",pos:"n",u:1,t:"F",g:"m"},
+{f:"general",e:"general",pos:"adj",u:1,t:"F"},
+{f:"escuchar",e:"listen",pos:"v",u:1,t:"F"},
+{f:"amor",e:"love",pos:"n",u:1,t:"F",g:"m"},
+{f:"cinco",e:"five",pos:"n",u:1,t:"F"},
+{f:"situación",e:"situation",pos:"n",u:1,t:"F",g:"f"},
+{f:"mes",e:"month",pos:"n",u:1,t:"F",g:"m"},
+{f:"diferente",e:"different",pos:"adj",u:1,t:"F"},
+{f:"ganar",e:"win, earn",pos:"v",u:1,t:"F"},
+{f:"estudio",e:"study, learning, studio",pos:"n",u:3,t:"F",g:"m"},
+{f:"largo",e:"long",pos:"adj",u:1,t:"F"},
+{f:"semana",e:"week",pos:"n",u:1,t:"F",g:"f"},
+{f:"partido",e:"match, party",pos:"n",u:2,t:"F",g:"m"},
+{f:"explicar",e:"explain",pos:"v",u:1,t:"F"},
+{f:"razón",e:"reason",pos:"n",u:1,t:"F",g:"f"},
+{f:"negro",e:"black",pos:"adj",u:1,t:"F"},
+{f:"bastante",e:"quite , quite a lot, enough",pos:"adj",u:1,t:"F"},
+{f:"efecto",e:"effect",pos:"n",u:1,t:"F",g:"m"},
+{f:"servicios",e:"toilets",pos:"n",u:1,t:"F"},
+{f:"servir",e:"serve",pos:"v",u:1,t:"F"},
+{f:"empresa",e:"company, business, firm",pos:"n",u:7,t:"F",g:"f"},
+{f:"centro",e:"centre, middle",pos:"n",u:1,t:"F",g:"m"},
+{f:"usar",e:"use",pos:"v",u:1,t:"F"},
+{f:"cambio; en cambio",e:"change",pos:"n",u:1,t:"F",g:"m"},
+{f:"clase",e:"class, kind, type, classroom, lesson",pos:"n",u:3,t:"F",g:"f"},
+{f:"animal",e:"animal",pos:"n",u:1,t:"F",g:"m"},
+{f:"número",e:"number",pos:"n",u:1,t:"F",g:"m"},
+{f:"información",e:"information",pos:"n",u:1,t:"F",g:"f"},
+{f:"tocar",e:"touch, play",pos:"v",u:4,t:"F"},
+{f:"ayudar",e:"help",pos:"v",u:1,t:"F"},
+{f:"público",e:"public, audience",pos:"adj",u:1,t:"F"},
+{f:"mostrar",e:"show",pos:"v",u:1,t:"F"},
+{f:"estudiar",e:"study",pos:"v",u:3,t:"F"},
+{f:"hermano",e:"brother",pos:"n",u:1,t:"F",g:"m"},
+{f:"sentido",e:"sense, meaning",pos:"n",u:1,t:"F",g:"m"},
+{f:"principio",e:"beginning, start",pos:"n",u:4,t:"F",g:"m"},
+{f:"programa",e:"programme",pos:"n",u:1,t:"F",g:"m"},
+{f:"música",e:"music",pos:"n",u:4,t:"F",g:"f"},
+{f:"traer",e:"bring",pos:"v",u:1,t:"F"},
+{f:"campo",e:"countryside, pitch, field",pos:"n",u:1,t:"F",g:"m"},
+{f:"correr",e:"run",pos:"v",u:1,t:"F"},
+{f:"actividad",e:"activity",pos:"n",u:1,t:"F",g:"f"},
+{f:"quizás",e:"perhaps, maybe",pos:"adv",u:1,t:"F"},
+{f:"comer",e:"eat",pos:"v",u:2,t:"F"},
+{f:"siguiente",e:"following, next",pos:"adj",u:1,t:"F"},
+{f:"sociedad",e:"society",pos:"n",u:1,t:"F",g:"f"},
+{f:"levantar; levantarse",e:"raise",pos:"v",u:1,t:"F"},
+{f:"jugar",e:"play",pos:"v",u:2,t:"F"},
+{f:"color",e:"colour",pos:"n",u:1,t:"F",g:"m"},
+{f:"zona",e:"area, zone",pos:"n",u:1,t:"F",g:"f"},
+{f:"mal**",e:"badly",pos:"adv",u:1,t:"F"},
+{f:"comprar",e:"buy, purchase",pos:"v",u:1,t:"F"},
+{f:"necesario",e:"necessary, required",pos:"adj",u:1,t:"F"},
+{f:"dinero",e:"money",pos:"n",u:1,t:"F",g:"m"},
+{f:"pie; a pie",e:"foot",pos:"n",u:1,t:"F",g:"m"},
+{f:"final; final",e:"end, ending",pos:"n",u:1,t:"F",g:"m"},
+{f:"decidir",e:"decide",pos:"v",u:1,t:"F"},
+{f:"blanco",e:"white",pos:"adj",u:1,t:"F"},
+{f:"equipo",e:"team, equipment",pos:"n",u:1,t:"F",g:"m"},
+{f:"difícil",e:"difficult, hard",pos:"adj",u:1,t:"F"},
+{f:"pagar",e:"pay",pos:"v",u:1,t:"F"},
+{f:"principal",e:"main, principal",pos:"adj",u:1,t:"F"},
+{f:"proyecto",e:"project, plan",pos:"n",u:1,t:"F",g:"m"},
+{f:"sol",e:"sun",pos:"n",u:1,t:"F",g:"m"},
+{f:"imagen",e:"image, picture",pos:"n",u:1,t:"F",g:"f"},
+{f:"varios",e:"several, various",pos:"adj",u:1,t:"F"},
+{f:"universidad",e:"university",pos:"n",u:3,t:"F",g:"f"},
+{f:"interés",e:"interest",pos:"n",u:1,t:"F",g:"m"},
+{f:"mayoría",e:"majority",pos:"n",u:1,t:"F",g:"f"},
+{f:"tarde; por la tarde",e:"afternoon, evening",pos:"n",u:1,t:"F",g:"f"},
+{f:"papel",e:"paper, role, part",pos:"n",u:4,t:"F",g:"m"},
+{f:"producto",e:"product",pos:"n",u:1,t:"F",g:"m"},
+{f:"medio",e:"half, middle, average",pos:"adj",u:1,t:"F"},
+{f:"continuar",e:"continue",pos:"v",u:1,t:"F"},
+{f:"rico",e:"rich, wealthy, tasty",pos:"adj",u:1,t:"F"},
+{f:"aire",e:"air",pos:"n",u:1,t:"F",g:"m"},
+{f:"mañana; por la mañana",e:"morning",pos:"n",u:1,t:"F",g:"f"},
+{f:"dormir; dormirse",e:"sleep",pos:"v",u:2,t:"F"},
+{f:"acción",e:"action, act",pos:"n",u:1,t:"F",g:"f"},
+{f:"seguro",e:"safe, sure, secure",pos:"adj",u:1,t:"F"},
+{f:"vista",e:"view, sight",pos:"n",u:1,t:"F",g:"f"},
+{f:"subir",e:"go up, upload",pos:"v",u:1,t:"F"},
+{f:"intentar",e:"try, attempt",pos:"v",u:1,t:"F"},
+{f:"descubrir",e:"discover",pos:"v",u:1,t:"F"},
+{f:"experiencia",e:"experience",pos:"n",u:1,t:"F",g:"f"},
+{f:"edad",e:"age",pos:"n",u:1,t:"F",g:"f"},
+{f:"andar",e:"walk",pos:"v",u:1,t:"F"},
+{f:"malo",e:"bad",pos:"adj",u:1,t:"F"},
+{f:"joven",e:"teenager, young person",pos:"n",u:1,t:"F"},
+{f:"escuela",e:"school",pos:"n",u:3,t:"F",g:"f"},
+{f:"uno",e:"one",pos:"n",u:1,t:"F"},
+{f:"nacer",e:"be born",pos:"v",u:1,t:"F"},
+{f:"posible",e:"possible",pos:"adj",u:1,t:"F"},
+{f:"aprender",e:"learn",pos:"v",u:1,t:"F"},
+{f:"serie",e:"series",pos:"n",u:1,t:"F",g:"f"},
+{f:"aceptar",e:"accept",pos:"v",u:1,t:"F"},
+{f:"fuerte",e:"strong",pos:"adj",u:1,t:"F"},
+{f:"especial",e:"special",pos:"adj",u:1,t:"F"},
+{f:"iglesia",e:"church",pos:"n",u:1,t:"F",g:"f"},
+{f:"seis",e:"six",pos:"n",u:1,t:"F"},
+{f:"ciento; cien",e:"one hundred",pos:"n",u:1,t:"F"},
+{f:"falta",e:"lack, shortage, mistake",pos:"n",u:1,t:"F",g:"f"},
+{f:"especie",e:"species",pos:"n",u:1,t:"F",g:"f"},
+{f:"real",e:"royal, real",pos:"adj",u:1,t:"F"},
+{f:"antiguo",e:"former , old, ancient",pos:"adj",u:1,t:"F"},
+{f:"santo",e:"saint, saint's day",pos:"n",u:1,t:"F",g:"m"},
+{f:"diez",e:"ten",pos:"n",u:1,t:"F"},
+{f:"tercer",e:"third",pos:"adj",u:1,t:"F"},
+{f:"tercero",e:"third",pos:"adj",u:1,t:"F"},
+{f:"espacio",e:"space, room",pos:"n",u:1,t:"F",g:"m"},
+{f:"bajo",e:"short, low",pos:"adj",u:1,t:"F"},
+{f:"aspecto",e:"aspect",pos:"n",u:1,t:"F",g:"m"},
+{f:"tarde",e:"late",pos:"adv",u:1,t:"F"},
+{f:"artículo",e:"article, product, item",pos:"n",u:4,t:"F",g:"m"},
+{f:"sueño",e:"dream, sleep",pos:"n",u:2,t:"F",g:"m"},
+{f:"responder",e:"reply, respond, answer",pos:"v",u:1,t:"F"},
+{f:"próximo",e:"next",pos:"adj",u:1,t:"F"},
+{f:"menor",e:"younger, youngest",pos:"adj",u:1,t:"F"},
+{f:"cultura",e:"culture",pos:"n",u:5,t:"F",g:"f"},
+{f:"uso",e:"use",pos:"n",u:1,t:"F",g:"m"},
+{f:"libre",e:"free, vacant",pos:"adj",u:1,t:"F"},
+{f:"corazón",e:"heart",pos:"n",u:4,t:"F",g:"m"},
+{f:"sitio (web)",e:"place, site",pos:"n",u:8,t:"F",g:"m"},
+{f:"minuto",e:"minute",pos:"n",u:1,t:"F",g:"m"},
+{f:"mar",e:"sea",pos:"n",u:1,t:"F"},
+{f:"carrera",e:"career, degree course, race",pos:"n",u:3,t:"F",g:"f"},
+{f:"bajar",e:"go down, get off, download, lower",pos:"v",u:1,t:"F"},
+{f:"mercado",e:"market",pos:"n",u:1,t:"F",g:"m"},
+{f:"educación",e:"education",pos:"n",u:1,t:"F",g:"f"},
+{f:"miedo",e:"fear",pos:"n",u:1,t:"F",g:"m"},
+{f:"pobre",e:"poor, unfortunate , without money",pos:"adj",u:1,t:"F"},
+{f:"demasiado(s)",e:"too much + noun, too much, too + adjective",pos:"adj",u:1,t:"F"},
+{f:"evitar",e:"avoid, prevent",pos:"v",u:1,t:"F"},
+{f:"río",e:"river",pos:"n",u:1,t:"F",g:"m"},
+{f:"actual",e:"current",pos:"adj",u:1,t:"F"},
+{f:"profesor",e:"teacher",pos:"n",u:3,t:"F"},
+{f:"resultado",e:"result",pos:"n",u:1,t:"F",g:"m"},
+{f:"importar",e:"matter, be important",pos:"v",u:1,t:"F"},
+{f:"pregunta",e:"question",pos:"n",u:1,t:"F",g:"f"},
+{f:"señora",e:"Mrs., lady",pos:"n",u:1,t:"F",g:"f"},
+{f:"repetir",e:"repeat",pos:"v",u:2,t:"F"},
+{f:"autor",e:"writer, author",pos:"n",u:1,t:"F",g:"m"},
+{f:"favor; por favor; a favor",e:"favour",pos:"n",u:1,t:"F",g:"m"},
+{f:"viaje",e:"trip, journey",pos:"n",u:7,t:"F",g:"m"},
+{f:"cerrar",e:"close",pos:"v",u:1,t:"F"},
+{f:"resto",e:"rest, remainder",pos:"n",u:1,t:"F",g:"m"},
+{f:"comunidad",e:"community",pos:"n",u:1,t:"F",g:"f"},
+{f:"mesa",e:"table",pos:"n",u:1,t:"F",g:"f"},
+{f:"vender",e:"sell",pos:"v",u:1,t:"F"},
+{f:"organización",e:"organisation",pos:"n",u:1,t:"F",g:"f"},
+{f:"peso",e:"weight, peso",pos:"n",u:1,t:"F",g:"m"},
+{f:"diferencia",e:"difference",pos:"n",u:1,t:"F",g:"f"},
+{f:"rojo",e:"red",pos:"adj",u:1,t:"F"},
+{f:"acordar; acordarse",e:"agree on, remind",pos:"v",u:1,t:"F"},
+{f:"miembro",e:"member",pos:"n",u:1,t:"F",g:"m"},
+{f:"película",e:"film, movie",pos:"n",u:4,t:"F",g:"f"},
+{f:"región",e:"region",pos:"n",u:9,t:"F",g:"f"},
+{f:"compañero",e:"classmate, group member, colleague, companion",pos:"n",u:1,t:"F"},
+{f:"precio",e:"price, cost, value",pos:"n",u:1,t:"F",g:"m"},
+{f:"francés",e:"French",pos:"adj",u:1,t:"F"},
+{f:"oportunidad",e:"opportunity, chance",pos:"n",u:1,t:"F",g:"f"},
+{f:"preparar; prepararse",e:"prepare",pos:"v",u:1,t:"F"},
+{f:"interesar",e:"interest",pos:"v",u:1,t:"F"},
+{f:"opinión",e:"opinion, view",pos:"n",u:1,t:"F",g:"f"},
+{f:"compartir",e:"share",pos:"v",u:1,t:"F"},
+{f:"capital",e:"capital",pos:"n",u:9,t:"F",g:"f"},
+{f:"inglés",e:"English",pos:"adj",u:1,t:"F"},
+{f:"fácil",e:"easy",pos:"adj",u:1,t:"F"},
+{f:"lengua",e:"tongue, language",pos:"n",u:1,t:"F",g:"f"},
+{f:"mandar",e:"send, order",pos:"v",u:1,t:"F"},
+{f:"decisión",e:"decision",pos:"n",u:1,t:"F",g:"f"},
+{f:"director",e:"headteacher, director, manager",pos:"n",u:3,t:"F"},
+{f:"participar",e:"participate",pos:"v",u:4,t:"F"},
+{f:"causa",e:"cause",pos:"n",u:1,t:"F",g:"f"},
+{f:"personaje",e:"character",pos:"n",u:1,t:"F",g:"m"},
+{f:"página",e:"page",pos:"n",u:1,t:"F",g:"f"},
+{f:"esfuerzo",e:"effort",pos:"n",u:1,t:"F",g:"m"},
+{f:"siete",e:"seven",pos:"n",u:1,t:"F"},
+{f:"enfermedad",e:"illness, disease",pos:"n",u:2,t:"F",g:"f"},
+{f:"teatro",e:"theatre, drama",pos:"n",u:2,t:"F",g:"m"},
+{f:"construir",e:"build",pos:"v",u:1,t:"F"},
+{f:"cama",e:"bed",pos:"n",u:1,t:"F",g:"f"},
+{f:"enseñar",e:"teach, show",pos:"v",u:1,t:"F"},
+{f:"salud",e:"health",pos:"n",u:2,t:"F",g:"f"},
+{f:"interesante",e:"interesting",pos:"adj",u:1,t:"F"},
+{f:"ayer",e:"yesterday",pos:"adv",u:1,t:"F"},
+{f:"cielo",e:"sky, heaven",pos:"n",u:1,t:"F",g:"m"},
+{f:"niña",e:"child, young girl",pos:"n",u:1,t:"F",g:"f"},
+{f:"norte",e:"north",pos:"n",u:1,t:"F",g:"m"},
+{f:"plan",e:"plan",pos:"n",u:1,t:"F",g:"m"},
+{f:"carta",e:"letter, menu",pos:"n",u:1,t:"F",g:"f"},
+{f:"colegio",e:"school",pos:"n",u:3,t:"F",g:"m"},
+{f:"policía",e:"police, police officer",pos:"n",u:1,t:"F"},
+{f:"compañía",e:"company",pos:"n",u:1,t:"F",g:"f"},
+{f:"ocho",e:"eight",pos:"n",u:1,t:"F"},
+{f:"tamaño",e:"size, dimension",pos:"n",u:1,t:"F",g:"m"},
+{f:"dirección",e:"address, direction",pos:"n",u:1,t:"F",g:"f"},
+{f:"aumentar",e:"increase",pos:"v",u:1,t:"F"},
+{f:"responsable",e:"responsible",pos:"adj",u:1,t:"F"},
+{f:"casarse",e:"get married",pos:"v",u:1,t:"F"},
+{f:"prueba",e:"test, trial, proof",pos:"n",u:1,t:"F",g:"f"},
+{f:"cuarto",e:"quarter , room",pos:"n",u:4,t:"F",g:"m"},
+{f:"julio",e:"July",pos:"n",u:1,t:"F",g:"m"},
+{f:"importancia",e:"importance",pos:"n",u:1,t:"F",g:"f"},
+{f:"sur",e:"south",pos:"n",u:1,t:"F",g:"m"},
+{f:"energía",e:"energy, power",pos:"n",u:1,t:"F",g:"f"},
+{f:"apoyar",e:"support",pos:"v",u:1,t:"F"},
+{f:"quitar; quitarse",e:"remove, take away",pos:"v",u:1,t:"F"},
+{f:"contestar",e:"answer, reply, respond",pos:"v",u:1,t:"F"},
+{f:"piel",e:"skin",pos:"n",u:1,t:"F",g:"f"},
+{f:"depender",e:"depend",pos:"v",u:1,t:"F"},
+{f:"lleno",e:"full",pos:"adj",u:1,t:"F"},
+{f:"tirar",e:"throw, pull",pos:"v",u:1,t:"F"},
+{f:"guardar",e:"keep, save",pos:"v",u:1,t:"F"},
+{f:"negocio",e:"business",pos:"n",u:7,t:"F",g:"m"},
+{f:"gritar",e:"shout",pos:"v",u:1,t:"F"},
+{f:"médico",e:"doctor",pos:"n",u:1,t:"F"},
+{f:"domingo",e:"Sunday",pos:"n",u:1,t:"F",g:"m"},
+{f:"peor**",e:"worse",pos:"adv",u:1,t:"F"},
+{f:"vestir; vestirse",e:"dress",pos:"v",u:1,t:"F"},
+{f:"físico",e:"physical",pos:"adj",u:1,t:"F"},
+{f:"cubano",e:"Cuban",pos:"adj",u:1,t:"F"},
+{f:"enviar",e:"send",pos:"v",u:1,t:"F"},
+{f:"modelo",e:"model",pos:"n",u:1,t:"F"},
+{f:"parar",e:"stop",pos:"v",u:1,t:"F"},
+{f:"rey",e:"king",pos:"n",u:1,t:"F",g:"m"},
+{f:"éxito",e:"success",pos:"n",u:1,t:"F",g:"m"},
+{f:"naturaleza",e:"nature",pos:"n",u:9,t:"F",g:"f"},
+{f:"preferir",e:"prefer",pos:"v",u:1,t:"F"},
+{f:"cultural",e:"cultural",pos:"adj",u:1,t:"F"},
+{f:"cantar",e:"sing",pos:"v",u:1,t:"F"},
+{f:"futuro",e:"future",pos:"n",u:3,t:"F",g:"m"},
+{f:"europeo",e:"European",pos:"adj",u:1,t:"F"},
+{f:"suerte",e:"luck, fortune",pos:"n",u:1,t:"F",g:"f"},
+{f:"ventana",e:"window",pos:"n",u:1,t:"F",g:"f"},
+{f:"jefe",e:"boss, manager, leader",pos:"n",u:1,t:"F"},
+{f:"chico",e:"boy",pos:"n",u:1,t:"F",g:"m"},
+{f:"banco",e:"bank, bench",pos:"n",u:1,t:"F",g:"m"},
+{f:"ambiente",e:"atmosphere, environment",pos:"n",u:9,t:"F",g:"m"},
+{f:"romper",e:"break",pos:"v",u:1,t:"F"},
+{f:"novela",e:"novel",pos:"n",u:1,t:"F",g:"f"},
+{f:"ciencias",e:"science",pos:"n",u:1,t:"F",g:"f"},
+{f:"flor",e:"flower",pos:"n",u:1,t:"F",g:"f"},
+{f:"duro",e:"hard, resilient",pos:"adj",u:1,t:"F"},
+{f:"común",e:"common",pos:"adj",u:1,t:"F"},
+{f:"pena",e:"sadness, shame, pity, trouble",pos:"n",u:1,t:"F",g:"f"},
+{f:"red (Red)",e:"network , net",pos:"n",u:3,t:"F",g:"f"},
+{f:"economía",e:"economy, economics",pos:"n",u:1,t:"F",g:"f"},
+{f:"árbol",e:"tree",pos:"n",u:1,t:"F",g:"m"},
+{f:"cuidar",e:"take care of",pos:"v",u:1,t:"F"},
+{f:"fecha",e:"date , day",pos:"n",u:1,t:"F",g:"f"},
+{f:"conocido",e:"known, well-known",pos:"adj",u:1,t:"F"},
+{f:"alemán",e:"German",pos:"adj",u:1,t:"F"},
+{f:"salvar",e:"save, rescue",pos:"v",u:1,t:"F"},
+{f:"extranjero",e:"abroad, foreigner",pos:"n",u:7,t:"F",g:"m"},
+{f:"entrada",e:"entrance, admission ticket",pos:"n",u:7,t:"F",g:"f"},
+{f:"planta",e:"plant, floor",pos:"n",u:1,t:"F",g:"f"},
+{f:"hija",e:"daughter, child",pos:"n",u:1,t:"F",g:"f"},
+{f:"recuerdo",e:"memory, souvenir",pos:"n",u:1,t:"F",g:"m"},
+{f:"costar",e:"cost, be hard",pos:"v",u:1,t:"F"},
+{f:"funcionar",e:"function, work",pos:"v",u:3,t:"F"},
+{f:"pared",e:"wall",pos:"n",u:1,t:"F",g:"f"},
+{f:"suficiente",e:"sufficient, enough",pos:"adj",u:1,t:"F"},
+{f:"ropa",e:"clothes, clothing",pos:"n",u:1,t:"F",g:"f"},
+{f:"abuela",e:"grandmother",pos:"n",u:1,t:"F",g:"f"},
+{f:"ayuda",e:"help",pos:"n",u:1,t:"F",g:"f"},
+{f:"popular",e:"popular",pos:"adj",u:1,t:"F"},
+{f:"visitar",e:"visit",pos:"v",u:7,t:"F"},
+{f:"estudiante",e:"student",pos:"n",u:1,t:"F"},
+{f:"fiesta",e:"party, festival",pos:"n",u:4,t:"F",g:"f"},
+{f:"metro",e:"underground, tube, metro, metre",pos:"n",u:1,t:"F",g:"m"},
+{f:"mañana",e:"tomorrow",pos:"adv",u:1,t:"F"},
+{f:"rato",e:"moment, while, time",pos:"n",u:1,t:"F",g:"m"},
+{f:"separar; separarse",e:"separate I separating",pos:"v",u:1,t:"F"},
+{f:"plaza",e:"square",pos:"n",u:1,t:"F",g:"f"},
+{f:"vecino",e:"neighbour",pos:"n",u:1,t:"F"},
+{f:"isla",e:"island",pos:"n",u:1,t:"F",g:"f"},
+{f:"azul",e:"blue",pos:"adj",u:1,t:"F"},
+{f:"verde",e:"green",pos:"adj",u:1,t:"F"},
+{f:"carácter",e:"personality, character",pos:"n",u:1,t:"F",g:"m"},
+{f:"viento",e:"wind",pos:"n",u:1,t:"F",g:"m"},
+{f:"completo",e:"complete, full",pos:"adj",u:1,t:"F"},
+{f:"artista",e:"artist, performer",pos:"n",u:4,t:"F"},
+{f:"contacto",e:"contact",pos:"n",u:1,t:"F",g:"m"},
+{f:"veinte, veinti-",e:"twenty",pos:"n",u:1,t:"F"},
+{f:"invitar",e:"invite",pos:"v",u:1,t:"F"},
+{f:"religioso",e:"religious",pos:"adj",u:1,t:"F"},
+{f:"tele, televisión",e:"TV, television",pos:"n",u:4,t:"F",g:"f"},
+{f:"recoger",e:"pick up, collect, tidy up",pos:"v",u:1,t:"F"},
+{f:"treinta",e:"thirty",pos:"n",u:1,t:"F"},
+{f:"histórico",e:"historic, historical",pos:"adj",u:1,t:"F"},
+{f:"lejos",e:"far",pos:"adv",u:1,t:"F"},
+{f:"mitad",e:"half, middle",pos:"n",u:1,t:"F",g:"f"},
+{f:"actitud",e:"attitude",pos:"n",u:1,t:"F",g:"f"},
+{f:"apoyo",e:"support, backing",pos:"n",u:1,t:"F",g:"m"},
+{f:"mensaje",e:"message",pos:"n",u:1,t:"F",g:"m"},
+{f:"mexicano",e:"Mexican",pos:"adj",u:1,t:"F"},
+{f:"mejorar",e:"improve, make better",pos:"v",u:1,t:"F"},
+{f:"serio",e:"serious",pos:"adj",u:1,t:"F"},
+{f:"edificio",e:"building",pos:"n",u:1,t:"F",g:"m"},
+{f:"noticia",e:"news",pos:"n",u:1,t:"F",g:"f"},
+{f:"carne",e:"meat",pos:"n",u:2,t:"F",g:"f"},
+{f:"moderno",e:"modern",pos:"adj",u:1,t:"F"},
+{f:"alumno",e:"student, pupil",pos:"n",u:3,t:"F",g:"m"},
+{f:"escritor",e:"writer",pos:"n",u:1,t:"F"},
+{f:"teléfono",e:"phone, telephone",pos:"n",u:8,t:"F",g:"m"},
+{f:"resolver",e:"solve, resolve",pos:"v",u:1,t:"F"},
+{f:"rápido",e:"quick, fast",pos:"adj",u:1,t:"F"},
+{f:"civil",e:"civil",pos:"adj",u:1,t:"F"},
+{f:"pelo",e:"hair",pos:"n",u:1,t:"F",g:"m"},
+{f:"riesgo",e:"risk",pos:"n",u:1,t:"F",g:"m"},
+{f:"afectar; afectarse",e:"affect I affecting",pos:"v",u:1,t:"F"},
+{f:"foto",e:"photo, picture",pos:"n",u:1,t:"F",g:"f"},
+{f:"reducir",e:"reduce",pos:"v",u:1,t:"F"},
+{f:"fuego",e:"fire",pos:"n",u:1,t:"F",g:"m"},
+{f:"celebrar; celebrarse",e:"celebrate",pos:"v",u:1,t:"F"},
+{f:"error",e:"error, mistake",pos:"n",u:1,t:"F",g:"m"},
+{f:"perro",e:"dog",pos:"n",u:1,t:"F",g:"m"},
+{f:"piso",e:"flat, apartment, floor",pos:"n",u:4,t:"F",g:"m"},
+{f:"bonito",e:"pretty, nice, beautiful",pos:"adj",u:1,t:"F"},
+{f:"pareja",e:"couple, partner",pos:"n",u:1,t:"F",g:"f"},
+{f:"despertar; despertarse",e:"wake",pos:"v",u:1,t:"F"},
+{f:"costa",e:"coast",pos:"n",u:1,t:"F",g:"f"},
+{f:"causar",e:"cause",pos:"v",u:1,t:"F"},
+{f:"grave",e:"serious, grave",pos:"adj",u:1,t:"F"},
+{f:"viajar",e:"travel",pos:"v",u:7,t:"F"},
+{f:"cámara",e:"camera",pos:"n",u:1,t:"F",g:"f"},
+{f:"ejército",e:"army",pos:"n",u:1,t:"F",g:"m"},
+{f:"comida",e:"food, meal, lunch",pos:"n",u:2,t:"F",g:"f"},
+{f:"caballo",e:"horse",pos:"n",u:1,t:"F",g:"m"},
+{f:"feliz",e:"happy, glad, content",pos:"adj",u:8,t:"F"},
+{f:"mayo",e:"May",pos:"n",u:1,t:"F",g:"m"},
+{f:"consejo",e:"advice",pos:"n",u:1,t:"F",g:"m"},
+{f:"revista",e:"magazine",pos:"n",u:1,t:"F",g:"f"},
+{f:"debido (a)",e:"owing , due",pos:"adj",u:1,t:"F"},
+{f:"trabajador",e:"hardworking",pos:"adj",u:3,t:"F"},
+{f:"agosto",e:"August",pos:"n",u:1,t:"F",g:"m"},
+{f:"pasado",e:"past, last",pos:"adj",u:1,t:"F"},
+{f:"detalle",e:"detail",pos:"n",u:1,t:"F",g:"m"},
+{f:"disfrutar",e:"enjoy",pos:"v",u:1,t:"F"},
+{f:"barrio",e:"neighborhood, district",pos:"n",u:1,t:"F",g:"m"},
+{f:"sentimiento",e:"feeling, sentiment",pos:"n",u:1,t:"F",g:"m"},
+{f:"calor",e:"heat, hot",pos:"n",u:2,t:"F",g:"m"},
+{f:"cine",e:"cinema",pos:"n",u:4,t:"F",g:"m"},
+{f:"grado",e:"degree",pos:"n",u:1,t:"F",g:"m"},
+{f:"ganas",e:"desire",pos:"n",u:1,t:"F"},
+{f:"probar",e:"taste, try",pos:"v",u:1,t:"F"},
+{f:"café",e:"coffee, cafe",pos:"n",u:1,t:"F",g:"m"},
+{f:"cincuenta",e:"fifty",pos:"n",u:1,t:"F"},
+{f:"marido",e:"husband",pos:"n",u:1,t:"F",g:"m"},
+{f:"costumbre",e:"custom, habit, tradition",pos:"n",u:5,t:"F",g:"f"},
+{f:"estrella",e:"star",pos:"n",u:6,t:"F",g:"f"},
+{f:"letra",e:"letter, lyrics",pos:"n",u:1,t:"F",g:"f"},
+{f:"hermoso",e:"beautiful, handsome",pos:"adj",u:1,t:"F"},
+{f:"canción",e:"song",pos:"n",u:1,t:"F",g:"f"},
+{f:"lluvia",e:"rain",pos:"n",u:1,t:"F",g:"f"},
+{f:"tío",e:"uncle",pos:"n",u:1,t:"F",g:"m"},
+{f:"conversación",e:"conversation",pos:"n",u:1,t:"F",g:"f"},
+{f:"nueve",e:"nine",pos:"n",u:1,t:"F"},
+{f:"tarea",e:"task, chore, homework",pos:"n",u:3,t:"F",g:"f"},
+{f:"famoso",e:"famous, well-known",pos:"adj",u:6,t:"F"},
+{f:"conducir",e:"drive",pos:"v",u:1,t:"F"},
+{f:"normal",e:"normal, usual",pos:"adj",u:1,t:"F"},
+{f:"coger",e:"take, take hold of, catch",pos:"v",u:1,t:"F"},
+{f:"raro",e:"strange, rare",pos:"adj",u:1,t:"F"},
+{f:"puesto",e:"post, position, stall",pos:"n",u:1,t:"F",g:"m"},
+{f:"vuelta",e:"return, trip, ride",pos:"n",u:1,t:"F",g:"f"},
+{f:"industria",e:"industry",pos:"n",u:1,t:"F",g:"f"},
+{f:"jugador",e:"player",pos:"n",u:4,t:"F"},
+{f:"frío",e:"cold",pos:"adj",u:1,t:"F"},
+{f:"app",e:"app",pos:"n",u:8,t:"F",g:"f"},
+{f:"optimista",e:"optimistic",pos:"adj",u:1,t:"F"},
+{f:"periódico",e:"newspaper",pos:"n",u:1,t:"F",g:"m"},
+{f:"directo",e:"direct, straight",pos:"adj",u:1,t:"F"},
+{f:"cristiano",e:"Christian",pos:"adj",u:1,t:"F"},
+{f:"argentino",e:"Argentinian",pos:"adj",u:1,t:"F"},
+{f:"ruido",e:"noise",pos:"n",u:1,t:"F",g:"m"},
+{f:"junio",e:"June",pos:"n",u:1,t:"F",g:"m"},
+{f:"frase",e:"phrase, sentence",pos:"n",u:1,t:"F",g:"f"},
+{f:"cerca",e:"close, near, nearby",pos:"adv",u:1,t:"F"},
+{f:"instrumento",e:"instrument",pos:"n",u:1,t:"F",g:"m"},
+{f:"sonrisa",e:"smile",pos:"n",u:1,t:"F",g:"f"},
+{f:"tecnología",e:"technology",pos:"n",u:8,t:"F",g:"f"},
+{f:"hospital",e:"hospital",pos:"n",u:1,t:"F",g:"m"},
+{f:"organizar",e:"organise",pos:"v",u:1,t:"F"},
+{f:"corto",e:"short, brief",pos:"adj",u:1,t:"F"},
+{f:"tradición",e:"tradition",pos:"n",u:5,t:"F",g:"f"},
+{f:"cliente",e:"client, customer",pos:"n",u:5,t:"F"},
+{f:"abril",e:"April",pos:"n",u:1,t:"F",g:"m"},
+{f:"habitación",e:"room, bedroom",pos:"n",u:1,t:"F",g:"f"},
+{f:"olor",e:"smell, odour",pos:"n",u:1,t:"F",g:"m"},
+{f:"oficina",e:"office",pos:"n",u:1,t:"F",g:"f"},
+{f:"tranquilo",e:"calm, tranquil, relaxed",pos:"adj",u:1,t:"F"},
+{f:"caja",e:"box, till",pos:"n",u:2,t:"F",g:"f"},
+{f:"puerto",e:"port, harbour",pos:"n",u:1,t:"F",g:"m"},
+{f:"clásico",e:"classic, classical",pos:"adj",u:1,t:"F"},
+{f:"sencillo",e:"simple, easy",pos:"adj",u:1,t:"F"},
+{f:"beber",e:"drink",pos:"v",u:2,t:"F"},
+{f:"escena",e:"scene , stage",pos:"n",u:4,t:"F",g:"f"},
+{f:"premio",e:"prize, reward, award",pos:"n",u:1,t:"F",g:"m"},
+{f:"cuarenta",e:"forty",pos:"n",u:1,t:"F"},
+{f:"enfermo",e:"ill, sick",pos:"adj",u:2,t:"F"},
+{f:"respeto",e:"respect, regard",pos:"n",u:1,t:"F",g:"m"},
+{f:"violencia",e:"violence",pos:"n",u:1,t:"F",g:"f"},
+{f:"risa",e:"laugh",pos:"n",u:1,t:"F",g:"f"},
+{f:"muerto",e:"dead",pos:"adj",u:1,t:"F"},
+{f:"proteger",e:"protect",pos:"v",u:1,t:"F"},
+{f:"museo",e:"museum",pos:"n",u:1,t:"F",g:"m"},
+{f:"perfecto",e:"perfecto",pos:"adj",u:1,t:"F"},
+{f:"durar",e:"last",pos:"v",u:1,t:"F"},
+{f:"paciente",e:"patient",pos:"n",u:1,t:"F"},
+{f:"habitante",e:"local , inhabitant",pos:"n",u:1,t:"F",g:"m"},
+{f:"presión",e:"pressure",pos:"n",u:1,t:"F",g:"f"},
+{f:"chica",e:"girl",pos:"n",u:1,t:"F",g:"f"},
+{f:"doce",e:"twelve",pos:"n",u:1,t:"F"},
+{f:"verano",e:"summer",pos:"n",u:1,t:"F",g:"m"},
+{f:"encima",e:"on top",pos:"adv",u:1,t:"F"},
+{f:"nota",e:"grade, note, mark",pos:"n",u:1,t:"F",g:"f"},
+{f:"salida",e:"exit, departure",pos:"n",u:4,t:"F",g:"f"},
+{f:"italiano",e:"Italian",pos:"adj",u:1,t:"F"},
+{f:"septiembre",e:"September",pos:"n",u:1,t:"F",g:"m"},
+{f:"matrimonio",e:"marriage",pos:"n",u:1,t:"F",g:"m"},
+{f:"idioma",e:"language",pos:"n",u:1,t:"F",g:"m"},
+{f:"ejercicio",e:"exercise",pos:"n",u:2,t:"F",g:"m"},
+{f:"hotel",e:"hotel",pos:"n",u:7,t:"F",g:"m"},
+{f:"diciembre",e:"December",pos:"n",u:1,t:"F",g:"m"},
+{f:"régimen",e:"diet",pos:"n",u:2,t:"F",g:"m"},
+{f:"peligro",e:"danger",pos:"n",u:1,t:"F",g:"m"},
+{f:"intención",e:"intention",pos:"n",u:1,t:"F",g:"f"},
+{f:"enero",e:"January",pos:"n",u:1,t:"F",g:"m"},
+{f:"opción",e:"option, choice",pos:"n",u:1,t:"F",g:"f"},
+{f:"independiente",e:"independent, self-sufficient",pos:"adj",u:1,t:"F"},
+{f:"sábado",e:"Saturday",pos:"n",u:1,t:"F",g:"m"},
+{f:"vídeo",e:"video",pos:"n",u:1,t:"F",g:"m"},
+{f:"seco",e:"dry",pos:"adj",u:1,t:"F"},
+{f:"positivo",e:"positive",pos:"adj",u:1,t:"F"},
+{f:"lista",e:"list, register",pos:"n",u:3,t:"F",g:"f"},
+{f:"coche",e:"car",pos:"n",u:1,t:"F",g:"m"},
+{f:"respetar",e:"respect I respecting",pos:"v",u:1,t:"F"},
+{f:"jardín",e:"garden",pos:"n",u:1,t:"F",g:"m"},
+{f:"patio",e:"yard, playground",pos:"n",u:4,t:"F",g:"m"},
+{f:"cerrado",e:"closed",pos:"adj",u:1,t:"F"},
+{f:"encantar",e:"love, delight, be delightful to I loving, delighting, being delightful to",pos:"v",u:1,t:"F"},
+{f:"tía",e:"aunt",pos:"n",u:1,t:"F",g:"f"},
+{f:"abogado",e:"lawyer",pos:"n",u:1,t:"F"},
+{f:"cocina",e:"kitchen, cooking, food technology",pos:"n",u:2,t:"F",g:"f"},
+{f:"quince",e:"fifteen",pos:"n",u:1,t:"F"},
+{f:"alegría",e:"joy, happiness",pos:"n",u:8,t:"F",g:"f"},
+{f:"tradicional",e:"traditional",pos:"adj",u:5,t:"F"},
+{f:"británico",e:"British",pos:"adj",u:1,t:"F"},
+{f:"musical",e:"musical",pos:"adj",u:4,t:"F"},
+{f:"marzo",e:"March",pos:"n",u:1,t:"F",g:"m"},
+{f:"periodista",e:"journalist",pos:"n",u:1,t:"F"},
+{f:"dueño",e:"owner, landlord",pos:"n",u:1,t:"F",g:"m"},
+{f:"octubre",e:"October",pos:"n",u:1,t:"F",g:"m"},
+{f:"recomendar",e:"recommend I recommending",pos:"v",u:1,t:"F"},
+{f:"aprobar",e:"pass I passing",pos:"v",u:1,t:"F"},
+{f:"viernes",e:"Friday",pos:"n",u:1,t:"F",g:"m"},
+{f:"hambre",e:"hunger",pos:"n",u:2,t:"F",g:"f"},
+{f:"soñar",e:"dream I dreaming",pos:"v",u:1,t:"F"},
+{f:"silla",e:"chair, seat",pos:"n",u:2,t:"F",g:"f"},
+{f:"describir",e:"describe I describing",pos:"v",u:1,t:"F"},
+{f:"comunicar",e:"communicate  I  communicating",pos:"v",u:1,t:"F"},
+{f:"marca",e:"make, brand",pos:"n",u:1,t:"F",g:"f"},
+{f:"activo",e:"active",pos:"adj",u:1,t:"F"},
+{f:"robar",e:"rob, steal I robbing, stealing",pos:"v",u:1,t:"F"},
+{f:"destruir",e:"destroy, ruin I destroying, ruining",pos:"v",u:1,t:"F"},
+{f:"reciente",e:"recent",pos:"adj",u:1,t:"F"},
+{f:"aparte (de)",e:"besides, apart",pos:"adv",u:4,t:"F"},
+{f:"sorpresa",e:"surprise",pos:"n",u:1,t:"F",g:"f"},
+{f:"temperatura",e:"temperature",pos:"n",u:1,t:"F",g:"f"},
+{f:"discutir",e:"argue, discuss I arguing, discussing",pos:"v",u:1,t:"F"},
+{f:"secretario",e:"secretary",pos:"n",u:1,t:"F"},
+{f:"daño",e:"harm, damage",pos:"n",u:1,t:"F",g:"m"},
+{f:"club",e:"club",pos:"n",u:1,t:"F",g:"m"},
+{f:"novio",e:"boyfriend, groom",pos:"n",u:1,t:"F",g:"m"},
+{f:"bailar",e:"dance I dancing",pos:"v",u:4,t:"F"},
+{f:"juventud",e:"youth",pos:"n",u:1,t:"F",g:"f"},
+{f:"pintar; pintarse",e:"paint I painting",pos:"v",u:1,t:"F"},
+{f:"industrial",e:"industrial",pos:"adj",u:1,t:"F"},
+{f:"religión",e:"religion",pos:"n",u:1,t:"F",g:"f"},
+{f:"baño",e:"bathroom",pos:"n",u:1,t:"F",g:"m"},
+{f:"pan",e:"bread",pos:"n",u:4,t:"F",g:"m"},
+{f:"vino",e:"wine",pos:"n",u:1,t:"F",g:"m"},
+{f:"chino",e:"Chinese",pos:"adj",u:1,t:"F"},
+{f:"izquierda",e:"left",pos:"n",u:1,t:"F",g:"f"},
+{f:"parque",e:"park",pos:"n",u:1,t:"F",g:"m"},
+{f:"temporada",e:"season",pos:"n",u:2,t:"F",g:"f"},
+{f:"católico",e:"Catholic",pos:"adj",u:1,t:"F"},
+{f:"diente",e:"tooth",pos:"n",u:1,t:"F",g:"m"},
+{f:"lunes",e:"Monday",pos:"n",u:1,t:"F",g:"m"},
+{f:"triste",e:"sad, unhappy, upset",pos:"adj",u:8,t:"F"},
+{f:"molestar; molestarse",e:"bother, annoy, upset, disturb I bothering, annoying, upsetting, disturbing",pos:"v",u:1,t:"F"},
+{f:"regla",e:"rule, ruler",pos:"n",u:1,t:"F",g:"f"},
+{f:"amarillo",e:"yellow",pos:"adj",u:1,t:"F"},
+{f:"barco",e:"boat, ship",pos:"n",u:1,t:"F",g:"m"},
+{f:"confianza",e:"confidence, trust",pos:"n",u:1,t:"F",g:"f"},
+{f:"leche",e:"milk",pos:"n",u:1,t:"F",g:"f"},
+{f:"avión",e:"plane, aeroplane",pos:"n",u:7,t:"F",g:"m"},
+{f:"transporte",e:"transport",pos:"n",u:2,t:"F",g:"m"},
+{f:"ventaja",e:"advantage, benefit",pos:"n",u:1,t:"F",g:"f"},
+{f:"artístico",e:"artistic",pos:"adj",u:4,t:"F"},
+{f:"estación",e:"station, season",pos:"n",u:1,t:"F",g:"f"},
+{f:"moda; de moda",e:"fashion",pos:"n",u:1,t:"F",g:"f"},
+{f:"eléctrico",e:"electric",pos:"adj",u:1,t:"F"},
+{f:"imposible",e:"impossible",pos:"adj",u:1,t:"F"},
+{f:"febrero",e:"February",pos:"n",u:1,t:"F",g:"m"},
+{f:"encender",e:"turn on I turning on",pos:"v",u:1,t:"F"},
+{f:"noviembre",e:"November",pos:"n",u:1,t:"F",g:"m"},
+{f:"educativo",e:"educational",pos:"adj",u:1,t:"F"},
+{f:"bosque",e:"forest, wood",pos:"n",u:1,t:"F",g:"m"},
+{f:"montar",e:"ride, set up I riding, setting up",pos:"v",u:1,t:"F"},
+{f:"empleo",e:"work, job, occupation",pos:"n",u:3,t:"F",g:"m"},
+{f:"primo",e:"cousin",pos:"n",u:1,t:"F",g:"m"},
+{f:"concierto",e:"concert",pos:"n",u:4,t:"F",g:"m"},
+{f:"sexo",e:"sex",pos:"n",u:1,t:"F",g:"m"},
+{f:"montaña",e:"mountain",pos:"n",u:1,t:"F",g:"f"},
+{f:"correcto",e:"correct, suitable",pos:"adj",u:1,t:"F"},
+{f:"fútbol",e:"football",pos:"n",u:1,t:"F",g:"m"},
+{f:"medicina",e:"medicine",pos:"n",u:1,t:"F",g:"f"},
+{f:"playa",e:"beach",pos:"n",u:1,t:"F",g:"f"},
+{f:"zapato",e:"shoe",pos:"n",u:1,t:"F",g:"m"},
+{f:"exacto",e:"exact, true",pos:"adj",u:1,t:"F"},
+{f:"tren",e:"train",pos:"n",u:7,t:"F",g:"m"},
+{f:"deporte",e:"sport",pos:"n",u:2,t:"F",g:"m"},
+{f:"fresco",e:"fresh, cool",pos:"adj",u:1,t:"F"},
+{f:"amistad",e:"friendship",pos:"n",u:1,t:"F",g:"f"},
+{f:"profesión",e:"profession",pos:"n",u:1,t:"F",g:"f"},
+{f:"copa",e:"cup, glass",pos:"n",u:1,t:"F",g:"f"},
+{f:"tienda",e:"shop, tent",pos:"n",u:1,t:"F",g:"f"},
+{f:"kilómetro",e:"kilometer",pos:"n",u:1,t:"F",g:"m"},
+{f:"nervioso",e:"nervous, uptight",pos:"adj",u:1,t:"F"},
+{f:"callarse",e:"be quiet, quieten down I being quiet, quietening down",pos:"v",u:1,t:"F"},
+{f:"actor",e:"actor",pos:"n",u:6,t:"F",g:"m"},
+{f:"cifra",e:"figure, number, amount",pos:"n",u:1,t:"F",g:"f"},
+{f:"esquina",e:"corner",pos:"n",u:1,t:"F",g:"f"},
+{f:"excelente",e:"excellent",pos:"adj",u:1,t:"F"},
+{f:"personalidad",e:"personality, celebrity",pos:"n",u:1,t:"F",g:"f"},
+{f:"instituto",e:"secondary school",pos:"n",u:3,t:"F",g:"m"},
+{f:"grabar",e:"record I recording",pos:"v",u:1,t:"F"},
+{f:"entrevista",e:"interview",pos:"n",u:1,t:"F",g:"f"},
+{f:"tardar",e:"take I taking",pos:"v",u:1,t:"F"},
+{f:"lento",e:"slow",pos:"adj",u:1,t:"F"},
+{f:"peligroso",e:"dangerous",pos:"adj",u:1,t:"F"},
+{f:"derecha",e:"right",pos:"n",u:1,t:"F",g:"f"},
+{f:"temprano",e:"early",pos:"adj",u:1,t:"F"},
+{f:"bolsa",e:"bag",pos:"n",u:1,t:"F",g:"f"},
+{f:"aun",e:"even, still",pos:"adv",u:2,t:"F"},
+{f:"vacío",e:"empty, vacant",pos:"adj",u:1,t:"F"},
+{f:"sesenta",e:"sixty",pos:"n",u:1,t:"F"},
+{f:"besar",e:"kiss I kissing",pos:"v",u:1,t:"F"},
+{f:"practicar",e:"practise I practising",pos:"v",u:1,t:"F"},
+{f:"comparar",e:"compare I comparing",pos:"v",u:1,t:"F"},
+{f:"falso",e:"false",pos:"adj",u:1,t:"F"},
+{f:"droga",e:"drug",pos:"n",u:2,t:"F",g:"f"},
+{f:"pájaro",e:"bird",pos:"n",u:1,t:"F",g:"m"},
+{f:"vaso",e:"glass",pos:"n",u:2,t:"F",g:"m"},
+{f:"laboral",e:"work, relating to work",pos:"adj",u:3,t:"F"},
+{f:"colombiano",e:"Colombian",pos:"adj",u:1,t:"F"},
+{f:"biblioteca",e:"library",pos:"n",u:1,t:"F",g:"f"},
+{f:"comportamiento",e:"behaviour",pos:"n",u:1,t:"F",g:"m"},
+{f:"plano",e:"map",pos:"n",u:1,t:"F",g:"m"},
+{f:"espectáculo",e:"show, spectacle",pos:"n",u:1,t:"F",g:"m"},
+{f:"arquitectura",e:"architecture",pos:"n",u:1,t:"F",g:"f"},
+{f:"doler",e:"hurt, be painful I hurting, being painful",pos:"v",u:1,t:"F"},
+{f:"correo (electrónico)",e:"mail, post",pos:"n",u:8,t:"F",g:"m"},
+{f:"prohibir",e:"prohibit, forbid I prohibiting, forbidding",pos:"v",u:1,t:"F"},
+{f:"increíble",e:"incredible, unbelievable",pos:"adj",u:1,t:"F"},
+{f:"delito",e:"crime",pos:"n",u:1,t:"F",g:"m"},
+{f:"jueves",e:"Thursday",pos:"n",u:1,t:"F",g:"m"},
+{f:"accidente",e:"accident",pos:"n",u:1,t:"F",g:"m"},
+{f:"compra(s)",e:"shopping",pos:"n",u:1,t:"F",g:"f"},
+{f:"felicidad",e:"happiness",pos:"n",u:8,t:"F",g:"f"},
+{f:"mentira",e:"lie",pos:"n",u:1,t:"F",g:"f"},
+{f:"clima",e:"climate",pos:"n",u:9,t:"F",g:"m"},
+{f:"lavar; lavarse",e:"wash I washing",pos:"v",u:1,t:"F"},
+{f:"gordo",e:"fat",pos:"adj",u:1,t:"F"},
+{f:"reloj",e:"clock, watch",pos:"n",u:1,t:"F",g:"m"},
+{f:"listo",e:"ready , clever, intelligent",pos:"adj",u:4,t:"F"},
+{f:"paisaje",e:"landscape, scenery",pos:"n",u:1,t:"F",g:"m"},
+{f:"vestido",e:"dress",pos:"n",u:1,t:"F",g:"m"},
+{f:"discusión",e:"discussion, argument",pos:"n",u:1,t:"F",g:"f"},
+{f:"once",e:"eleven",pos:"n",u:1,t:"F"},
+{f:"limpio",e:"clean",pos:"adj",u:1,t:"F"},
+{f:"científico",e:"scientist",pos:"n",u:1,t:"F"},
+{f:"limpiar",e:"clean I cleaning",pos:"v",u:1,t:"F"},
+{f:"puente",e:"bridge, long weekend",pos:"n",u:1,t:"F",g:"m"},
+{f:"carretera",e:"road",pos:"n",u:1,t:"F",g:"f"},
+{f:"salón",e:"living room",pos:"n",u:1,t:"F",g:"m"},
+{f:"dibujo",e:"drawing, art",pos:"n",u:4,t:"F",g:"m"},
+{f:"gato",e:"cat",pos:"n",u:1,t:"F",g:"m"},
+{f:"cero",e:"zero",pos:"n",u:1,t:"F"},
+{f:"oferta",e:"offer",pos:"n",u:1,t:"F",g:"f"},
+{f:"(un) montón",e:"lot of, heap, pile",pos:"n",u:1,t:"F",g:"m"},
+{f:"vuelo",e:"flight",pos:"n",u:1,t:"F",g:"m"},
+{f:"delante",e:"in front, ahead",pos:"adv",u:1,t:"F"},
+{f:"descansar",e:"rest, relax I resting, relaxing",pos:"v",u:1,t:"F"},
+{f:"gris",e:"grey",pos:"adj",u:1,t:"F"},
+{f:"judío",e:"Jewish",pos:"adj",u:1,t:"F"},
+{f:"respirar",e:"breathe I breathing",pos:"v",u:2,t:"F"},
+{f:"empleado",e:"employee",pos:"n",u:1,t:"F",g:"m"},
+{f:"apagar",e:"turn off, extinguish I turning off, extinguishing",pos:"v",u:1,t:"F"},
+{f:"justo",e:"fair, just",pos:"adj",u:1,t:"F"},
+{f:"escalera",e:"stairs, ladder",pos:"n",u:1,t:"F",g:"f"},
+{f:"negativo",e:"negative",pos:"adj",u:1,t:"F"},
+{f:"identidad",e:"identity",pos:"n",u:1,t:"F",g:"f"},
+{f:"plato",e:"plate, dish",pos:"n",u:1,t:"F",g:"m"},
+{f:"caliente",e:"hot, warm",pos:"adj",u:1,t:"F"},
+{f:"invierno",e:"winter",pos:"n",u:1,t:"F",g:"m"},
+{f:"pantalón",e:"trousers",pos:"n",u:1,t:"F",g:"m"},
+{f:"variedad",e:"variety",pos:"n",u:1,t:"F",g:"f"},
+{f:"miércoles",e:"Wednesday",pos:"n",u:1,t:"F",g:"m"},
+{f:"cansado",e:"tired, tiring",pos:"adj",u:1,t:"F"},
+{f:"instalación",e:"facility",pos:"n",u:1,t:"F",g:"f"},
+{f:"cuidado",e:"care, carefulness",pos:"n",u:1,t:"F",g:"m"},
+{f:"reina",e:"queen",pos:"n",u:1,t:"F",g:"f"},
+{f:"votar",e:"vote I voting",pos:"v",u:1,t:"F"},
+{f:"empujar",e:"push I pushing",pos:"v",u:1,t:"F"},
+{f:"pintor",e:"painter",pos:"n",u:1,t:"F"},
+{f:"criticar",e:"criticise",pos:"v",u:1,t:"F"},
+{f:"pantalla",e:"screen, monitor",pos:"n",u:1,t:"F",g:"f"},
+{f:"sucio",e:"dirty",pos:"adj",u:1,t:"F"},
+{f:"dulce",e:"sweet",pos:"adj",u:1,t:"F"},
+{f:"gastar",e:"spend , use up I spending , using up",pos:"v",u:1,t:"F"},
+{f:"humor",e:"humour, mood",pos:"n",u:1,t:"F",g:"m"},
+{f:"camisa",e:"shirt",pos:"n",u:1,t:"F",g:"f"},
+{f:"botella",e:"bottle",pos:"n",u:1,t:"F",g:"f"},
+{f:"aguantar",e:"put up with, stand I putting up with, standing",pos:"v",u:1,t:"F"},
+{f:"fumar",e:"smoke I smoking",pos:"v",u:2,t:"F"},
+{f:"chileno",e:"Chilean",pos:"adj",u:1,t:"F"},
+{f:"perdido",e:"lost",pos:"adj",u:1,t:"F"},
+{f:"semejante",e:"similar",pos:"adj",u:1,t:"F"},
+{f:"pelearse",e:"fight I fighting",pos:"v",u:1,t:"F"},
+{f:"escoger",e:"choose I choosing",pos:"v",u:1,t:"F"},
+{f:"claro",e:"of course, clearly",pos:"adv",u:1,t:"F"},
+{f:"fruta",e:"fruit",pos:"n",u:1,t:"F",g:"f"},
+{f:"ligero",e:"light",pos:"adj",u:1,t:"F"},
+{f:"típico",e:"typical",pos:"adj",u:1,t:"F"},
+{f:"ingeniero",e:"engineer",pos:"n",u:1,t:"F"},
+{f:"setenta",e:"seventy",pos:"n",u:1,t:"F"},
+{f:"débil",e:"weak",pos:"adj",u:1,t:"F"},
+{f:"contento",e:"happy, content, pleased",pos:"adj",u:8,t:"F"},
+{f:"tarjeta",e:"written card, bank card",pos:"n",u:1,t:"F",g:"f"},
+{f:"sano",e:"healthy, wholesome",pos:"adj",u:2,t:"F"},
+{f:"plástico",e:"plastic",pos:"n",u:1,t:"F",g:"m"},
+{f:"ochenta",e:"eighty",pos:"n",u:1,t:"F"},
+{f:"regalo",e:"present, gift",pos:"n",u:1,t:"F",g:"m"},
+{f:"templo",e:"temple",pos:"n",u:1,t:"F",g:"m"},
+{f:"huevo",e:"egg",pos:"n",u:1,t:"F",g:"m"},
+{f:"novia",e:"girlfriend, bride",pos:"n",u:1,t:"F",g:"f"},
+{f:"agradable",e:"pleasant, nice",pos:"adj",u:1,t:"F"},
+{f:"examen",e:"exam",pos:"n",u:3,t:"F",g:"m"},
+{f:"azúcar",e:"sugar",pos:"n",u:1,t:"F",g:"m"},
+{f:"diseñar",e:"design I designing",pos:"v",u:1,t:"F"},
+{f:"bebé",e:"baby",pos:"n",u:1,t:"F",g:"m"},
+{f:"baile",e:"dance",pos:"n",u:4,t:"F",g:"m"},
+{f:"detrás",e:"behind",pos:"adv",u:1,t:"F"},
+{f:"deportivo",e:"sporty, sports",pos:"adj",u:2,t:"F"},
+{f:"músico",e:"musician",pos:"n",u:4,t:"F"},
+{f:"anuncio",e:"advert",pos:"n",u:1,t:"F",g:"m"},
+{f:"alegre",e:"cheerful, happy, lively",pos:"adj",u:8,t:"F"},
+{f:"Internet",e:"internet",pos:"n",u:8,t:"F",g:"m"},
+{f:"cantante",e:"singer",pos:"n",u:6,t:"F"},
+{f:"llover",e:"rain I raining",pos:"v",u:1,t:"F"},
+{f:"práctico",e:"practical, useful",pos:"adj",u:1,t:"F"},
+{f:"móvil",e:"mobile phone",pos:"n",u:8,t:"F",g:"m"},
+{f:"salario",e:"salary",pos:"n",u:1,t:"F",g:"m"},
+{f:"probable",e:"probable, likely",pos:"adj",u:1,t:"F"},
+{f:"barato",e:"cheap",pos:"adj",u:1,t:"F"},
+{f:"caro",e:"expensive",pos:"adj",u:1,t:"F"},
+{f:"concurso",e:"competition, quiz",pos:"n",u:1,t:"F",g:"m"},
+{f:"deberes",e:"homework",pos:"n",u:3,t:"F",g:"m"},
+{f:"odiar",e:"hate",pos:"v",u:1,t:"F"},
+{f:"sed",e:"thirst",pos:"n",u:1,t:"F",g:"f"},
+{f:"tráfico",e:"traffic",pos:"n",u:1,t:"F",g:"m"},
+{f:"cómodo",e:"comfortable",pos:"adj",u:1,t:"F"},
+{f:"delgado",e:"thin, slim",pos:"adj",u:1,t:"F"},
+{f:"dormitorio",e:"bedroom",pos:"n",u:1,t:"F",g:"m"},
+{f:"fábrica",e:"factory",pos:"n",u:6,t:"F",g:"f"},
+{f:"toro",e:"bull",pos:"n",u:1,t:"F",g:"m"},
+{f:"dieta",e:"diet",pos:"n",u:2,t:"F",g:"f"},
+{f:"favorito",e:"favourite",pos:"adj",u:1,t:"F"},
+{f:"feo",e:"ugly",pos:"adj",u:1,t:"F"},
+{f:"tonto",e:"silly",pos:"adj",u:2,t:"F"},
+{f:"ideal",e:"ideal",pos:"adj",u:1,t:"F"},
+{f:"catorce",e:"fourteen",pos:"n",u:1,t:"F"},
+{f:"oeste",e:"west",pos:"n",u:1,t:"F",g:"m"},
+{f:"euro",e:"euro",pos:"n",u:1,t:"F",g:"m"},
+{f:"noventa",e:"ninety",pos:"n",u:1,t:"F"},
+{f:"divertido",e:"fun, enjoyable",pos:"adj",u:1,t:"F"},
+{f:"boda",e:"wedding",pos:"n",u:5,t:"F",g:"f"},
+{f:"basura",e:"rubbish, junk",pos:"n",u:1,t:"F",g:"f"},
+{f:"aeropuerto",e:"airport",pos:"n",u:1,t:"F",g:"m"},
+{f:"horrible",e:"horrible",pos:"adj",u:1,t:"F"},
+{f:"horario",e:"timetable, schedule",pos:"n",u:1,t:"F",g:"m"},
+{f:"cena",e:"dinner, evening meal",pos:"n",u:2,t:"F",g:"f"},
+{f:"castillo",e:"castle",pos:"n",u:1,t:"F",g:"m"},
+{f:"seguidor",e:"follower, fan, supporter",pos:"n",u:6,t:"F",g:"m"},
+{f:"apellido",e:"surname",pos:"n",u:1,t:"F",g:"m"},
+{f:"estadio",e:"stadium",pos:"n",u:1,t:"F",g:"m"},
+{f:"grasa",e:"fat, grease",pos:"n",u:1,t:"F",g:"f"},
+{f:"ordenador",e:"computer",pos:"n",u:8,t:"F",g:"m"},
+{f:"restaurante",e:"restaurant",pos:"n",u:1,t:"F",g:"m"},
+{f:"vacaciones; de vacaciones",e:"holidays",pos:"n",u:5,t:"F",g:"f"},
+{f:"trece",e:"thirteen",pos:"n",u:1,t:"F"},
+{f:"guitarra",e:"guitar",pos:"n",u:1,t:"F",g:"f"},
+{f:"celebración",e:"celebration",pos:"n",u:5,t:"F",g:"f"},
+{f:"dieciocho",e:"eighteen",pos:"n",u:1,t:"F"},
+{f:"primavera",e:"spring",pos:"n",u:1,t:"F",g:"f"},
+{f:"falda",e:"skirt",pos:"n",u:1,t:"F",g:"f"},
+{f:"musulmán",e:"Muslim",pos:"adj",u:1,t:"F"},
+{f:"bebida",e:"drink",pos:"n",u:2,t:"F",g:"f"},
+{f:"uniforme",e:"uniform",pos:"n",u:1,t:"F",g:"m"},
+{f:"turista",e:"tourist",pos:"n",u:7,t:"F"},
+{f:"rubio",e:"blond, fair",pos:"adj",u:1,t:"F"},
+{f:"genial",e:"great",pos:"adj",u:2,t:"F"},
+{f:"anoche",e:"last night",pos:"adv",u:1,t:"F"},
+{f:"ficción",e:"fiction",pos:"n",u:1,t:"F",g:"f"},
+{f:"naranja",e:"orange",pos:"n",u:1,t:"F",g:"f"},
+{f:"billete",e:"ticket",pos:"n",u:2,t:"F",g:"m"},
+{f:"roto",e:"broken, torn",pos:"adj",u:1,t:"F"},
+{f:"reservar",e:"book, reserve",pos:"v",u:4,t:"F"},
+{f:"estupendo",e:"brilliant, great, marvellous, wonderful",pos:"adj",u:2,t:"F"},
+{f:"cenar",e:"have dinner, tea",pos:"v",u:2,t:"F"},
+{f:"martes",e:"Tuesday",pos:"n",u:1,t:"F",g:"m"},
+{f:"contaminación",e:"pollution",pos:"n",u:9,t:"F",g:"f"},
+{f:"ahorrar",e:"save",pos:"v",u:1,t:"F"},
+{f:"manzana",e:"apple",pos:"n",u:8,t:"F",g:"f"},
+{f:"quinientos",e:"five hundred",pos:"n",u:1,t:"F"},
+{f:"simpático",e:"nice, friendly",pos:"adj",u:1,t:"F"},
+{f:"cumpleaños",e:"birthday",pos:"n",u:5,t:"F",g:"m"},
+{f:"dieciséis",e:"sixteen",pos:"n",u:1,t:"F"},
+{f:"enfermero",e:"nurse",pos:"n",u:1,t:"F",g:"m"},
+{f:"hermana",e:"sister",pos:"n",u:1,t:"F",g:"f"},
+{f:"desayuno",e:"breakfast",pos:"n",u:1,t:"F",g:"m"},
+{f:"paro",e:"unemployment, strike",pos:"n",u:1,t:"F",g:"m"},
+{f:"diecisiete",e:"seventeen",pos:"n",u:1,t:"F"},
+{f:"pescado",e:"fish",pos:"n",u:1,t:"F",g:"m"},
+{f:"matemáticas",e:"maths",pos:"n",u:1,t:"F"},
+{f:"otoño",e:"autumn",pos:"n",u:1,t:"F",g:"m"},
+{f:"Navidad",e:"Christmas",pos:"n",u:5,t:"F",g:"f"},
+{f:"actriz",e:"actor , actress",pos:"n",u:6,t:"F",g:"f"},
+{f:"pollo",e:"chicken",pos:"n",u:1,t:"F",g:"m"},
+{f:"nadar",e:"swim",pos:"v",u:4,t:"F"},
+{f:"bicicleta, bici",e:"bicycle, bike",pos:"n",u:1,t:"F",g:"f"},
+{f:"autobús",e:"bus",pos:"n",u:7,t:"F",g:"m"},
+{f:"entrenar; entrenarse",e:"train",pos:"v",u:7,t:"F"},
+{f:"casado",e:"married",pos:"adj",u:1,t:"F"},
+{f:"geografía",e:"geography",pos:"n",u:1,t:"F",g:"f"},
+{f:"gracioso",e:"funny",pos:"adj",u:1,t:"F"},
+{f:"aburrido",e:"bored, boring",pos:"adj",u:1,t:"F"},
+{f:"útil",e:"useful",pos:"adj",u:1,t:"F"},
+{f:"recepción",e:"reception",pos:"n",u:1,t:"F",g:"f"},
+{f:"asignatura",e:"school subject",pos:"n",u:3,t:"F",g:"f"},
+{f:"maleta",e:"suitcase",pos:"n",u:1,t:"F",g:"f"},
+{f:"camiseta",e:"t-shirt",pos:"n",u:1,t:"F",g:"f"},
+{f:"guapo",e:"good-looking",pos:"adj",u:1,t:"F"},
+{f:"diecinueve",e:"nineteen",pos:"n",u:1,t:"F"},
+{f:"sal",e:"salt",pos:"n",u:1,t:"F",g:"f"},
+{f:"estrés",e:"stress",pos:"n",u:2,t:"F",g:"m"},
+{f:"repasar",e:"revise, review",pos:"v",u:1,t:"F"},
+{f:"contaminar",e:"pollute, contaminate",pos:"v",u:1,t:"F"},
+{f:"verdura",e:"vegetable",pos:"n",u:1,t:"F",g:"f"},
+{f:"animado",e:"lively",pos:"adj",u:1,t:"F"},
+{f:"tomate",e:"tomato",pos:"n",u:1,t:"F",g:"m"},
+{f:"desfile",e:"procession, parade",pos:"n",u:1,t:"F",g:"m"},
+{f:"bienvenido",e:"welcome",pos:"adj",u:1,t:"F"},
+{f:"piscina",e:"swimming pool",pos:"n",u:4,t:"F",g:"f"},
+{f:"excursión",e:"trip, excursion",pos:"n",u:1,t:"F",g:"f"},
+{f:"abuelo",e:"grandfather",pos:"n",u:1,t:"F",g:"m"},
+{f:"soltero",e:"single, unmarried",pos:"adj",u:1,t:"F"},
+{f:"teclado",e:"keyboard",pos:"n",u:1,t:"F",g:"m"},
+{f:"acoso",e:"bullying",pos:"n",u:1,t:"F",g:"m"},
+{f:"afueras",e:"outskirts, suburbs",pos:"n",u:1,t:"F"},
+{f:"alojamiento",e:"accommodation",pos:"n",u:7,t:"F",g:"m"},
+{f:"baloncesto",e:"basketball",pos:"n",u:1,t:"F",g:"m"},
+{f:"bi(sexual)",e:"bi",pos:"adj",u:1,t:"F"},
+{f:"bocadillo",e:"sandwich",pos:"n",u:1,t:"F",g:"m"},
+{f:"bolígrafo",e:"pen",pos:"n",u:1,t:"F",g:"m"},
+{f:"camarera",e:"waitress",pos:"n",u:1,t:"F",g:"f"},
+{f:"camarero",e:"waiter",pos:"n",u:1,t:"F",g:"m"},
+{f:"camping",e:"camp site, camping",pos:"n",u:1,t:"F",g:"m"},
+{f:"caramelo",e:"sweet",pos:"n",u:1,t:"F",g:"m"},
+{f:"cuidador",e:"carer",pos:"n",u:1,t:"F",g:"m"},
+{f:"desventaja",e:"disadvantage",pos:"n",u:1,t:"F",g:"f"},
+{f:"divorciarse",e:"get divorced",pos:"v",u:1,t:"F"},
+{f:"emocionante",e:"exciting",pos:"adj",u:1,t:"F"},
+{f:"enojado",e:"angry",pos:"adj",u:1,t:"F"},
+{f:"ensalada",e:"salad",pos:"n",u:1,t:"F",g:"f"},
+{f:"equilibrado",e:"balanced",pos:"adj",u:1,t:"F"},
+{f:"gafas",e:"glasses",pos:"n",u:1,t:"F"},
+{f:"gay",e:"gay",pos:"adj",u:1,t:"F"},
+{f:"gimnasio",e:"gym",pos:"n",u:1,t:"F",g:"m"},
+{f:"gratis",e:"free",pos:"adj",u:1,t:"F"},
+{f:"guay",e:"cool",pos:"adj",u:1,t:"F"},
+{f:"hamburguesa",e:"burger",pos:"n",u:1,t:"F",g:"f"},
+{f:"hetero(sexual)",e:"straight, heterosexual",pos:"adj",u:1,t:"F"},
+{f:"influencer",e:"influencer",pos:"n",u:1,t:"F"},
+{f:"informática",e:"ICT",pos:"n",u:1,t:"F",g:"f"},
+{f:"jamón",e:"ham",pos:"n",u:1,t:"F",g:"m"},
+{f:"madrastra",e:"stepmother",pos:"n",u:1,t:"F",g:"f"},
+{f:"marrón",e:"brown",pos:"adj",u:1,t:"F"},
+{f:"medioambiente/medio ambiente",e:"environment, natural world",pos:"n",u:9,t:"F",g:"m"},
+{f:"mezquita",e:"mosque",pos:"n",u:1,t:"F",g:"f"},
+{f:"mochila",e:"rucksack, school bag",pos:"n",u:3,t:"F",g:"f"},
+{f:"moreno",e:"brown , dark",pos:"adj",u:1,t:"F"},
+{f:"Nochebuena",e:"Christmas Eve",pos:"n",u:5,t:"F",g:"f"},
+{f:"novecientos",e:"nine hundred",pos:"n",u:1,t:"F"},
+{f:"online",e:"online",pos:"adj",u:8,t:"F"},
+{f:"padrastro",e:"stepfather",pos:"n",u:1,t:"F",g:"m"},
+{f:"peluquero",e:"hairdresser",pos:"n",u:1,t:"F",g:"m"},
+{f:"perezoso",e:"lazy",pos:"adj",u:1,t:"F"},
+{f:"reciclar",e:"recycle",pos:"v",u:9,t:"F"},
+{f:"recreo",e:"break",pos:"n",u:3,t:"F",g:"m"},
+{f:"setecientos",e:"seven hundred",pos:"n",u:1,t:"F"},
+{f:"sinagoga",e:"synagogue",pos:"n",u:1,t:"F",g:"f"},
+{f:"supermercado",e:"supermarket",pos:"n",u:1,t:"F",g:"m"},
+{f:"tableta",e:"tablet",pos:"n",u:1,t:"F",g:"f"},
+{f:"tatuaje",e:"tattoo",pos:"n",u:1,t:"F",g:"m"},
+{f:"telerrealidad",e:"reality TV",pos:"n",u:1,t:"F",g:"f"},
+{f:"transgénero",e:"transgender",pos:"adj",u:1,t:"F"},
+{f:"uva",e:"grape",pos:"n",u:1,t:"F",g:"f"},
+{f:"vegano",e:"vegan",pos:"adj",u:1,t:"F"},
+{f:"vegetariano",e:"vegetarian",pos:"adj",u:2,t:"F"},
+{f:"videojuego",e:"computer game",pos:"n",u:4,t:"F",g:"m"},
+{f:"corrida",e:"bullfight",pos:"n",u:1,t:"F",g:"f"},
+{f:"ayuntamiento",e:"Spanish town council, city council, town hall",pos:"n",u:9,t:"F",g:"m"},
+{f:"Nochevieja",e:"New Year's Eve",pos:"n",u:1,t:"F",g:"f"},
+{f:"paella",e:"paella",pos:"n",u:2,t:"F",g:"f"},
+{f:"tapas",e:"small dishes of food, bar snacks",pos:"n",u:2,t:"F"},
+{f:"disfraz",e:"costume, fancy dress",pos:"n",u:6,t:"F",g:"m"},
+{f:"Las Fallas",e:"Valencian celebration involving burning of papier mâché models",pos:"n",u:5,t:"F"},
+{f:"Tomatina",e:"Spanish tomato festival",pos:"n",u:5,t:"F",g:"f"},
+{f:"Sanfermines",e:"festival in Pamplona involving running of the bulls",pos:"n",u:5,t:"F"},
+{f:"España",e:"Spain",pos:"n",u:1,t:"F",g:"f"},
+{f:"flamenco",e:"flamenco",pos:"n",u:4,t:"F",g:"m"},
+{f:"Sudamérica",e:"South America",pos:"n",u:1,t:"F",g:"f"},
+{f:"Bachillerato",e:"Baccalaureate",pos:"n",u:2,t:"F",g:"m"},
+{f:"nuestro, nuestra, nuestros, nuestras",e:"ours",pos:"adj",u:1,t:"H"},
+{f:"parte",e:"part",pos:"n",u:4,t:"H",g:"f"},
+{f:"llevar; llevar + time period + present participle; llevarse",e:"take, carry, wear, lead I taking, carrying, wearing, leading",pos:"v",u:1,t:"H"},
+{f:"el mejor, la mejor, los mejores, las mejores",e:"the best",pos:"adj",u:1,t:"H"},
+{f:"forma",e:"form, shape, way",pos:"n",u:1,t:"H",g:"f"},
+{f:"junto",e:"together",pos:"adj",u:1,t:"H"},
+{f:"caso",e:"case, occasion",pos:"n",u:1,t:"H",g:"m"},
+{f:"el mayor, la mayor, los mayores, las mayores",e:"the oldest",pos:"adj",u:1,t:"H"},
+{f:"manera",e:"way, manner",pos:"n",u:1,t:"H",g:"f"},
+{f:"contar",e:"tell, count",pos:"v",u:1,t:"H"},
+{f:"propio",e:"own",pos:"adj",u:1,t:"H"},
+{f:"gobierno",e:"government",pos:"n",u:1,t:"H",g:"m"},
+{f:"punto",e:"point, full stop, dot",pos:"n",u:1,t:"H",g:"m"},
+{f:"obra",e:"work, book, play",pos:"n",u:3,t:"H",g:"f"},
+{f:"obras",e:"roadworks, building works",pos:"n",u:3,t:"H"},
+{f:"existir",e:"exist",pos:"v",u:1,t:"H"},
+{f:"sistema",e:"system",pos:"n",u:1,t:"H",g:"m"},
+{f:"siglo",e:"century",pos:"n",u:1,t:"H",g:"m"},
+{f:"nacional",e:"national",pos:"adj",u:1,t:"H"},
+{f:"sentarse",e:"sit",pos:"v",u:1,t:"H"},
+{f:"considerar",e:"consider",pos:"v",u:1,t:"H"},
+{f:"realidad",e:"reality",pos:"n",u:1,t:"H",g:"f"},
+{f:"convertirse",e:"become, transform",pos:"v",u:1,t:"H"},
+{f:"igual",e:"equal, same, alike",pos:"adj",u:1,t:"H"},
+{f:"todavía",e:"still, yet",pos:"adv",u:2,t:"H"},
+{f:"derecho",e:"right, law",pos:"n",u:3,t:"H",g:"m"},
+{f:"utilizar",e:"use",pos:"v",u:1,t:"H"},
+{f:"estado",e:"state, condition",pos:"n",u:1,t:"H",g:"m"},
+{f:"resultar",e:"be, turn out",pos:"v",u:1,t:"H"},
+{f:"conseguir",e:"get, obtain",pos:"v",u:1,t:"H"},
+{f:"lograr",e:"achieve, manage to",pos:"v",u:1,t:"H"},
+{f:"ocurrir",e:"happen, occur",pos:"v",u:8,t:"H"},
+{f:"aparecer",e:"turn up, appear",pos:"v",u:8,t:"H"},
+{f:"muerte",e:"death",pos:"n",u:2,t:"H",g:"f"},
+{f:"nivel",e:"level",pos:"n",u:1,t:"H",g:"m"},
+{f:"fuera",e:"outside, out",pos:"adv",u:1,t:"H"},
+{f:"formar",e:"form, set up",pos:"v",u:1,t:"H"},
+{f:"económico",e:"cheap, inexpensive, economic",pos:"adj",u:1,t:"H"},
+{f:"distinto",e:"distinct, different",pos:"adj",u:1,t:"H"},
+{f:"ley",e:"law, rule",pos:"n",u:1,t:"H",g:"f"},
+{f:"incluso",e:"even, including",pos:"adv",u:1,t:"H"},
+{f:"cara",e:"face, expression",pos:"n",u:1,t:"H",g:"f"},
+{f:"ofrecer",e:"offer, present",pos:"v",u:1,t:"H"},
+{f:"época",e:"time, age, period",pos:"n",u:1,t:"H",g:"f"},
+{f:"camino",e:"way, route, path",pos:"n",u:1,t:"H",g:"m"},
+{f:"(no) tampoco",e:"neither, either",pos:"adv",u:1,t:"H"},
+{f:"desarrollo",e:"development",pos:"n",u:1,t:"H",g:"m"},
+{f:"alcanzar",e:"reach, catch up with",pos:"v",u:1,t:"H"},
+{f:"desarrollar",e:"develop",pos:"v",u:1,t:"H"},
+{f:"pronto",e:"soon, early, quick",pos:"adv",u:1,t:"H"},
+{f:"meter",e:"put, place",pos:"v",u:1,t:"H"},
+{f:"dirigir",e:"direct, manage",pos:"v",u:1,t:"H"},
+{f:"reconocer",e:"recognise, admit",pos:"v",u:1,t:"H"},
+{f:"fondo",e:"bottom, back, end , background",pos:"n",u:1,t:"H",g:"m"},
+{f:"incluir",e:"include",pos:"v",u:1,t:"H"},
+{f:"orden",e:"order",pos:"n",u:1,t:"H",g:"m"},
+{f:"dedicar",e:"devote, dedicate",pos:"v",u:1,t:"H"},
+{f:"comprender",e:"understand",pos:"v",u:1,t:"H"},
+{f:"obtener",e:"obtain, get",pos:"v",u:1,t:"H"},
+{f:"política",e:"politics, policy",pos:"n",u:1,t:"H",g:"f"},
+{f:"publicar",e:"publish, post",pos:"v",u:8,t:"H"},
+{f:"población",e:"population",pos:"n",u:1,t:"H",g:"f"},
+{f:"cantidad",e:"quantity, amount",pos:"n",u:1,t:"H",g:"f"},
+{f:"posibilidad",e:"possibility",pos:"n",u:1,t:"H",g:"f"},
+{f:"echar; echarse",e:"throw, cast",pos:"v",u:1,t:"H"},
+{f:"internacional",e:"international",pos:"adj",u:1,t:"H"},
+{f:"boca",e:"mouth",pos:"n",u:1,t:"H",g:"f"},
+{f:"mover",e:"move",pos:"v",u:1,t:"H"},
+{f:"el menor, la menor, los menores, las menores",e:"the youngest",pos:"adj",u:1,t:"H"},
+{f:"brazo",e:"arm",pos:"n",u:1,t:"H",g:"m"},
+{f:"línea",e:"line, course",pos:"n",u:1,t:"H",g:"f"},
+{f:"apenas",e:"hardly, barely",pos:"adv",u:1,t:"H"},
+{f:"respuesta",e:"answer, reply",pos:"n",u:1,t:"H",g:"f"},
+{f:"atención",e:"attention",pos:"n",u:1,t:"H",g:"f"},
+{f:"anterior",e:"previous, preceding",pos:"adj",u:1,t:"H"},
+{f:"comentario",e:"remark, comment",pos:"n",u:1,t:"H",g:"m"},
+{f:"imaginar",e:"imagine",pos:"v",u:1,t:"H"},
+{f:"sufrir",e:"suffer",pos:"v",u:1,t:"H"},
+{f:"investigación",e:"investigation, research",pos:"n",u:1,t:"H",g:"f"},
+{f:"caminar",e:"walk",pos:"v",u:1,t:"H"},
+{f:"gastos",e:"expenses, costs, spending",pos:"n",u:1,t:"H"},
+{f:"silencio",e:"silence",pos:"n",u:1,t:"H",g:"m"},
+{f:"natural",e:"natural",pos:"adj",u:1,t:"H"},
+{f:"indicar",e:"point , indicate",pos:"v",u:1,t:"H"},
+{f:"libertad",e:"freedom",pos:"n",u:1,t:"H",g:"f"},
+{f:"ambos, ambas",e:"both",pos:"adj",u:1,t:"H"},
+{f:"seguridad",e:"security, safety",pos:"n",u:1,t:"H",g:"f"},
+{f:"cuestión",e:"issue, matter, question",pos:"n",u:1,t:"H",g:"f"},
+{f:"duda",e:"doubt",pos:"n",u:1,t:"H",g:"f"},
+{f:"dato",e:"data, information, fact",pos:"n",u:1,t:"H",g:"m"},
+{f:"dentro",e:"inside, within",pos:"adv",u:1,t:"H"},
+{f:"destacar",e:"emphasise, stand out, highlight",pos:"v",u:1,t:"H"},
+{f:"suelo",e:"ground, floor",pos:"n",u:1,t:"H",g:"m"},
+{f:"referir",e:"refer",pos:"v",u:1,t:"H"},
+{f:"paz",e:"peace",pos:"n",u:1,t:"H",g:"f"},
+{f:"sangre",e:"blood",pos:"n",u:1,t:"H",g:"f"},
+{f:"verdadero",e:"true, real",pos:"adj",u:1,t:"H"},
+{f:"soler",e:"normally , tend to , usually",pos:"v",u:1,t:"H"},
+{f:"crecer",e:"grow, increase",pos:"v",u:1,t:"H"},
+{f:"elegir",e:"choose, elect",pos:"v",u:1,t:"H"},
+{f:"conocimiento",e:"knowledge",pos:"n",u:1,t:"H",g:"m"},
+{f:"objeto",e:"object, thing",pos:"n",u:1,t:"H",g:"m"},
+{f:"autoridad",e:"authority",pos:"n",u:1,t:"H",g:"f"},
+{f:"mundial",e:"world",pos:"adj",u:1,t:"H"},
+{f:"regresar",e:"come back, go back, return",pos:"v",u:1,t:"H"},
+{f:"significar",e:"mean",pos:"v",u:1,t:"H"},
+{f:"matar",e:"kill",pos:"v",u:2,t:"H"},
+{f:"dolor",e:"pain, ache",pos:"n",u:1,t:"H",g:"m"},
+{f:"ocasión",e:"occasion, opportunity",pos:"n",u:1,t:"H",g:"f"},
+{f:"acompañar",e:"go with, accompany",pos:"v",u:1,t:"H"},
+{f:"estilo",e:"style",pos:"n",u:1,t:"H",g:"m"},
+{f:"cubrir",e:"cover",pos:"v",u:1,t:"H"},
+{f:"entregar; entregarse",e:"deliver, hand in",pos:"v",u:1,t:"H"},
+{f:"llorar",e:"cry",pos:"v",u:1,t:"H"},
+{f:"enorme",e:"enormous, vast",pos:"adj",u:1,t:"H"},
+{f:"comentar",e:"comment",pos:"v",u:1,t:"H"},
+{f:"calidad",e:"quality",pos:"n",u:1,t:"H",g:"f"},
+{f:"jamás",e:"never",pos:"adv",u:1,t:"H"},
+{f:"fuente",e:"source, fountain",pos:"n",u:1,t:"H",g:"f"},
+{f:"capaz",e:"capable, able",pos:"adj",u:1,t:"H"},
+{f:"desaparecer",e:"disappear",pos:"v",u:8,t:"H"},
+{f:"asunto",e:"matter, issue, affair",pos:"n",u:1,t:"H",g:"m"},
+{f:"medida",e:"measure",pos:"n",u:1,t:"H",g:"f"},
+{f:"impuesto",e:"tax",pos:"n",u:1,t:"H",g:"m"},
+{f:"mamá",e:"mum",pos:"n",u:1,t:"H",g:"f"},
+{f:"mío, mía, míos, mías",e:"mine",pos:"adj",u:1,t:"H"},
+{f:"abandonar",e:"abandon, leave",pos:"v",u:1,t:"H"},
+{f:"profesional",e:"professional",pos:"adj",u:1,t:"H"},
+{f:"arriba",e:"upstairs, above",pos:"adv",u:1,t:"H"},
+{f:"el peor, la peor, los peores, las peores",e:"the worst",pos:"adj",u:1,t:"H"},
+{f:"notar",e:"notice",pos:"v",u:1,t:"H"},
+{f:"expresar",e:"express",pos:"v",u:1,t:"H"},
+{f:"proponer",e:"propose, suggest",pos:"v",u:1,t:"H"},
+{f:"título",e:"title, degree",pos:"n",u:3,t:"H",g:"m"},
+{f:"extraño",e:"strange",pos:"adj",u:1,t:"H"},
+{f:"privado",e:"private",pos:"adj",u:1,t:"H"},
+{f:"literatura",e:"literature",pos:"n",u:1,t:"H",g:"f"},
+{f:"cortar",e:"cut",pos:"v",u:1,t:"H"},
+{f:"profundo",e:"deep, profound",pos:"adj",u:1,t:"H"},
+{f:"actuar",e:"act",pos:"v",u:1,t:"H"},
+{f:"consecuencia; como consecuencia",e:"consequence",pos:"n",u:1,t:"H",g:"f"},
+{f:"piedra",e:"stone, rock",pos:"n",u:1,t:"H",g:"f"},
+{f:"pierna",e:"leg",pos:"n",u:1,t:"H",g:"f"},
+{f:"motivo",e:"reason, motive",pos:"n",u:1,t:"H",g:"m"},
+{f:"deseo",e:"desire, wish",pos:"n",u:1,t:"H",g:"m"},
+{f:"reunir; reunirse",e:"gather, bring together",pos:"v",u:1,t:"H"},
+{f:"abajo",e:"down, below, downstairs",pos:"adv",u:1,t:"H"},
+{f:"construcción",e:"construction, building",pos:"n",u:1,t:"H",g:"f"},
+{f:"oscuro",e:"dark, obscure",pos:"adj",u:1,t:"H"},
+{f:"sombra",e:"shade, shadow",pos:"n",u:1,t:"H",g:"f"},
+{f:"expresión",e:"expression",pos:"n",u:1,t:"H",g:"f"},
+{f:"vivo; en vivo",e:"alive, bright",pos:"adj",u:1,t:"H"},
+{f:"cruzar",e:"cross",pos:"v",u:1,t:"H"},
+{f:"nación",e:"nation",pos:"n",u:1,t:"H",g:"f"},
+{f:"memoria",e:"memory",pos:"n",u:1,t:"H",g:"f"},
+{f:"solución",e:"solution, answer",pos:"n",u:1,t:"H",g:"f"},
+{f:"total",e:"total, entire",pos:"adj",u:1,t:"H"},
+{f:"loco",e:"crazy, insane",pos:"adj",u:1,t:"H"},
+{f:"exigir",e:"demand",pos:"v",u:1,t:"H"},
+{f:"oro",e:"gold",pos:"n",u:1,t:"H",g:"m"},
+{f:"papá",e:"dad",pos:"n",u:1,t:"H",g:"m"},
+{f:"formación",e:"training, education",pos:"n",u:7,t:"H",g:"f"},
+{f:"escapar; escaparse",e:"escape",pos:"v",u:1,t:"H"},
+{f:"visita",e:"visit, visitor",pos:"n",u:7,t:"H",g:"f"},
+{f:"responsabilidad",e:"responsibility",pos:"n",u:1,t:"H",g:"f"},
+{f:"generación",e:"generation",pos:"n",u:1,t:"H",g:"f"},
+{f:"ciudadano",e:"citizen, member of the public",pos:"n",u:1,t:"H",g:"m"},
+{f:"blog",e:"blog",pos:"n",u:1,t:"H",g:"m"},
+{f:"radio",e:"radio",pos:"n",u:1,t:"H",g:"f"},
+{f:"emplear",e:"employ, use",pos:"v",u:1,t:"H"},
+{f:"máximo",e:"maximum",pos:"adj",u:1,t:"H"},
+{f:"sorprender",e:"surprise",pos:"v",u:1,t:"H"},
+{f:"puro",e:"pure, clean",pos:"adj",u:1,t:"H"},
+{f:"distancia",e:"distance",pos:"n",u:1,t:"H",g:"f"},
+{f:"reunión",e:"meeting",pos:"n",u:1,t:"H",g:"f"},
+{f:"madera",e:"wood",pos:"n",u:1,t:"H",g:"f"},
+{f:"destino",e:"destination, destiny",pos:"n",u:1,t:"H",g:"m"},
+{f:"contenido",e:"content, contents",pos:"n",u:1,t:"H",g:"m"},
+{f:"pintura",e:"painting, paint",pos:"n",u:1,t:"H",g:"f"},
+{f:"diario",e:"newspaper, diary, journal",pos:"n",u:1,t:"H",g:"m"},
+{f:"altura",e:"height, altitude",pos:"n",u:1,t:"H",g:"f"},
+{f:"mente",e:"mind",pos:"n",u:1,t:"H",g:"f"},
+{f:"creación",e:"creation",pos:"n",u:2,t:"H",g:"f"},
+{f:"advertir",e:"warn",pos:"v",u:1,t:"H"},
+{f:"esperanza",e:"hope",pos:"n",u:1,t:"H",g:"f"},
+{f:"influencia",e:"influence",pos:"n",u:1,t:"H",g:"f"},
+{f:"controlar",e:"control",pos:"v",u:1,t:"H"},
+{f:"documento",e:"document",pos:"n",u:1,t:"H",g:"m"},
+{f:"prensa",e:"press",pos:"n",u:1,t:"H",g:"f"},
+{f:"suyo, suya, suyos, suyas",e:"his, hers",pos:"adj",u:1,t:"H"},
+{f:"conservar",e:"conserve, preserve",pos:"v",u:1,t:"H"},
+{f:"campaña",e:"campaign",pos:"n",u:1,t:"H",g:"f"},
+{f:"usuario",e:"user",pos:"n",u:1,t:"H",g:"m"},
+{f:"alimento",e:"food, nourishment",pos:"n",u:2,t:"H",g:"m"},
+{f:"conflicto",e:"conflict",pos:"n",u:1,t:"H",g:"m"},
+{f:"atender",e:"serve, look after",pos:"v",u:5,t:"H"},
+{f:"añadir",e:"add",pos:"v",u:1,t:"H"},
+{f:"impedir",e:"prevent",pos:"v",u:1,t:"H"},
+{f:"actualmente",e:"now, at present, currently",pos:"adv",u:1,t:"H"},
+{f:"sensación",e:"feeling, sensation",pos:"n",u:1,t:"H",g:"f"},
+{f:"venta",e:"sale",pos:"n",u:1,t:"H",g:"f"},
+{f:"sonido",e:"sound",pos:"n",u:1,t:"H",g:"m"},
+{f:"factor",e:"factor",pos:"n",u:6,t:"H",g:"m"},
+{f:"firmar",e:"sign",pos:"v",u:1,t:"H"},
+{f:"luchar",e:"fight, struggle",pos:"v",u:1,t:"H"},
+{f:"prestar",e:"lend, pay",pos:"v",u:1,t:"H"},
+{f:"insistir",e:"insist",pos:"v",u:1,t:"H"},
+{f:"superar",e:"get over, overcome",pos:"v",u:1,t:"H"},
+{f:"identificar",e:"identify",pos:"v",u:1,t:"H"},
+{f:"comercio",e:"commerce, trade, business",pos:"n",u:7,t:"H",g:"m"},
+{f:"mencionar",e:"mention",pos:"v",u:1,t:"H"},
+{f:"numeroso",e:"numerous, large, big",pos:"adj",u:1,t:"H"},
+{f:"mínimo",e:"minimum",pos:"adj",u:1,t:"H"},
+{f:"instalar",e:"install",pos:"v",u:1,t:"H"},
+{f:"lenguaje",e:"language, speech",pos:"n",u:1,t:"H",g:"m"},
+{f:"esconder",e:"hide",pos:"v",u:1,t:"H"},
+{f:"introducir",e:"introduce, bring in",pos:"v",u:1,t:"H"},
+{f:"entero",e:"entire, whole",pos:"adj",u:1,t:"H"},
+{f:"pegar",e:"hit, stick",pos:"v",u:1,t:"H"},
+{f:"cobrar",e:"charge , earn",pos:"v",u:1,t:"H"},
+{f:"velocidad",e:"speed, velocity",pos:"n",u:9,t:"H",g:"f"},
+{f:"recurso",e:"resource",pos:"n",u:1,t:"H",g:"m"},
+{f:"familiar",e:"of the family, relating to the family",pos:"adj",u:1,t:"H"},
+{f:"dificultad",e:"difficulty, obstacle",pos:"n",u:1,t:"H",g:"f"},
+{f:"víctima",e:"victim",pos:"n",u:1,t:"H",g:"f"},
+{f:"culpa",e:"blame, fault",pos:"n",u:1,t:"H",g:"f"},
+{f:"beneficio",e:"benefit",pos:"n",u:1,t:"H",g:"m"},
+{f:"ordenar",e:"tidy, organise",pos:"v",u:1,t:"H"},
+{f:"límite",e:"limit",pos:"n",u:1,t:"H",g:"m"},
+{f:"asistir",e:"attend I attending",pos:"v",u:1,t:"H"},
+{f:"comienzo",e:"start, beginning",pos:"n",u:4,t:"H",g:"m"},
+{f:"lectura",e:"reading",pos:"n",u:4,t:"H",g:"f"},
+{f:"hogar",e:"home",pos:"n",u:1,t:"H",g:"m"},
+{f:"merecer",e:"deserve, be worthy of I deserving, being worthy of",pos:"v",u:1,t:"H"},
+{f:"reflejar",e:"reflect I reflecting",pos:"v",u:1,t:"H"},
+{f:"género",e:"gender, genre",pos:"n",u:1,t:"H",g:"m"},
+{f:"acostumbrarse",e:"get accustomed, get used",pos:"v",u:5,t:"H"},
+{f:"informe",e:"report",pos:"n",u:1,t:"H",g:"m"},
+{f:"impresión",e:"impression",pos:"n",u:1,t:"H",g:"f"},
+{f:"canal",e:"channel",pos:"n",u:1,t:"H",g:"m"},
+{f:"fundar",e:"set up, establish",pos:"v",u:1,t:"H"},
+{f:"tendencia",e:"tendency, trend",pos:"n",u:1,t:"H",g:"f"},
+{f:"temer",e:"fear I fearing",pos:"v",u:1,t:"H"},
+{f:"solicitar",e:"request, apply for",pos:"v",u:8,t:"H"},
+{f:"reacción",e:"reaction",pos:"n",u:1,t:"H",g:"f"},
+{f:"contribuir",e:"contribute",pos:"v",u:1,t:"H"},
+{f:"rechazar",e:"reject  I  rejecting",pos:"v",u:1,t:"H"},
+{f:"cargar",e:"charge I charging",pos:"v",u:8,t:"H"},
+{f:"señal",e:"sign, signal",pos:"n",u:1,t:"H",g:"f"},
+{f:"frecuencia",e:"frequency",pos:"n",u:1,t:"H",g:"f"},
+{f:"banda",e:"band",pos:"n",u:4,t:"H",g:"f"},
+{f:"arreglar; arreglarse",e:"repair, fix, tidy I repairing, fixing, tidying",pos:"v",u:4,t:"H"},
+{f:"exposición",e:"exhibition, display",pos:"n",u:4,t:"H",g:"f"},
+{f:"enseñanza",e:"teaching, education",pos:"n",u:1,t:"H",g:"f"},
+{f:"desconocido",e:"unknown",pos:"adj",u:1,t:"H"},
+{f:"dispuesto",e:"ready, willing, prepared",pos:"adj",u:2,t:"H"},
+{f:"universitario",e:"university",pos:"adj",u:3,t:"H"},
+{f:"belleza",e:"beauty",pos:"n",u:1,t:"H",g:"f"},
+{f:"clave",e:"key, crucial",pos:"n",u:1,t:"H",g:"f"},
+{f:"diseño",e:"design",pos:"n",u:1,t:"H",g:"m"},
+{f:"representante",e:"representative",pos:"n",u:1,t:"H"},
+{f:"cometer",e:"commit I committing",pos:"v",u:1,t:"H"},
+{f:"aumento",e:"increase, rise",pos:"n",u:1,t:"H",g:"m"},
+{f:"regalar",e:"give I giving",pos:"v",u:1,t:"H"},
+{f:"consumo",e:"consumption",pos:"n",u:1,t:"H",g:"m"},
+{f:"protección",e:"protection",pos:"n",u:1,t:"H",g:"f"},
+{f:"devolver",e:"return, give back I returning, giving back",pos:"v",u:1,t:"H"},
+{f:"agradecer",e:"be grateful for I being grateful for",pos:"v",u:1,t:"H"},
+{f:"emoción",e:"emotion, excitement",pos:"n",u:1,t:"H",g:"f"},
+{f:"atreverse",e:"dare I daring",pos:"v",u:1,t:"H"},
+{f:"prometer; prometerse",e:"promise I promising",pos:"v",u:1,t:"H"},
+{f:"diálogo",e:"dialogue, conversation",pos:"n",u:1,t:"H",g:"m"},
+{f:"soldado",e:"soldier",pos:"n",u:1,t:"H"},
+{f:"secreto",e:"secret",pos:"n",u:1,t:"H",g:"m"},
+{f:"soledad",e:"loneliness, solitude",pos:"n",u:1,t:"H",g:"f"},
+{f:"planeta",e:"planet",pos:"n",u:7,t:"H",g:"m"},
+{f:"nube",e:"cloud",pos:"n",u:1,t:"H",g:"f"},
+{f:"perdonar",e:"forgive, excuse I forgiving, excusing",pos:"v",u:1,t:"H"},
+{f:"frontera",e:"border, frontier",pos:"n",u:1,t:"H",g:"f"},
+{f:"gas",e:"gas",pos:"n",u:1,t:"H",g:"m"},
+{f:"evento",e:"event",pos:"n",u:1,t:"H",g:"m"},
+{f:"atraer",e:"attract I attracting",pos:"v",u:1,t:"H"},
+{f:"fiel",e:"faithful, loyal",pos:"adj",u:1,t:"H"},
+{f:"maravilloso",e:"wonderful, marvelous",pos:"adj",u:1,t:"H"},
+{f:"preocupación",e:"worry, concern",pos:"n",u:1,t:"H",g:"f"},
+{f:"emitir",e:"emit, give off, broadcast",pos:"v",u:1,t:"H"},
+{f:"mezclar",e:"mix I mixing",pos:"v",u:1,t:"H"},
+{f:"volumen",e:"volume",pos:"n",u:1,t:"H",g:"m"},
+{f:"investigar",e:"investigate, research I investigating, researching",pos:"v",u:1,t:"H"},
+{f:"adulto",e:"adult",pos:"n",u:1,t:"H",g:"m"},
+{f:"cerebro",e:"brain",pos:"n",u:1,t:"H",g:"m"},
+{f:"promover",e:"promote I promoting",pos:"v",u:1,t:"H"},
+{f:"llegada",e:"arrival",pos:"n",u:1,t:"H",g:"f"},
+{f:"selección",e:"choice, selection, national sports team",pos:"n",u:2,t:"H",g:"f"},
+{f:"animar",e:"encourage, cheer up I encouraging, cheering up",pos:"v",u:1,t:"H"},
+{f:"iniciativa",e:"initiative",pos:"n",u:1,t:"H",g:"f"},
+{f:"químico",e:"chemical",pos:"adj",u:1,t:"H"},
+{f:"evidente",e:"evident, obvious",pos:"adj",u:1,t:"H"},
+{f:"quemar; quemarse",e:"burn I burning",pos:"v",u:1,t:"H"},
+{f:"confiar",e:"trust, confide I trusting, confiding",pos:"v",u:1,t:"H"},
+{f:"colgar",e:"hang , post I hanging , posting",pos:"v",u:1,t:"H"},
+{f:"arena",e:"sand",pos:"n",u:1,t:"H",g:"f"},
+{f:"anciano",e:"elderly person",pos:"n",u:1,t:"H",g:"m"},
+{f:"influir",e:"influence I influencing",pos:"v",u:1,t:"H"},
+{f:"sugerir",e:"suggest I suggesting",pos:"v",u:1,t:"H"},
+{f:"abrazar",e:"hug I hugging",pos:"v",u:1,t:"H"},
+{f:"sección",e:"section, department",pos:"n",u:4,t:"H",g:"f"},
+{f:"independencia",e:"independence",pos:"n",u:1,t:"H",g:"f"},
+{f:"equivocarse",e:"be wrong, make a mistake",pos:"v",u:1,t:"H"},
+{f:"infantil",e:"of children, children's",pos:"adj",u:1,t:"H"},
+{f:"costo",e:"price, cost",pos:"n",u:1,t:"H",g:"m"},
+{f:"tuyo, tuya, tuyos, tuyas",e:"yours",pos:"adj",u:1,t:"H"},
+{f:"orquesta",e:"orchestra",pos:"n",u:1,t:"H",g:"f"},
+{f:"inteligencia",e:"intelligence",pos:"n",u:1,t:"H",g:"f"},
+{f:"pasear",e:"take for a walk, go for a walk I taking for a walk, going for a walk",pos:"v",u:1,t:"H"},
+{f:"vuestro, vuestra, vuestros, vuestras",e:"yours",pos:"adj",u:1,t:"H"},
+{f:"nacimiento",e:"birth, origin",pos:"n",u:1,t:"H",g:"m"},
+{f:"inútil",e:"useless",pos:"adj",u:1,t:"H"},
+{f:"efectivo",e:"effective",pos:"adj",u:1,t:"H"},
+{f:"aventura",e:"adventure",pos:"n",u:1,t:"H",g:"f"},
+{f:"precioso",e:"beautiful, precious",pos:"adj",u:1,t:"H"},
+{f:"humo",e:"smoke, fumes",pos:"n",u:2,t:"H",g:"m"},
+{f:"obrero",e:"worker, labourer",pos:"n",u:3,t:"H",g:"m"},
+{f:"latino",e:"Latin American, Latin",pos:"adj",u:1,t:"H"},
+{f:"suave",e:"soft, gentle, mild",pos:"adj",u:1,t:"H"},
+{f:"amenazar",e:"threaten I threatening",pos:"v",u:2,t:"H"},
+{f:"acostar; acostarse",e:"put to bed  I putting to bed",pos:"v",u:1,t:"H"},
+{f:"alrededores",e:"surrounding area, vicinity",pos:"n",u:1,t:"H",g:"m"},
+{f:"experto",e:"expert",pos:"n",u:1,t:"H",g:"m"},
+{f:"apreciar",e:"appreciate",pos:"v",u:8,t:"H"},
+{f:"riqueza",e:"wealth, riches",pos:"n",u:1,t:"H",g:"f"},
+{f:"rincón",e:"corner",pos:"n",u:1,t:"H",g:"m"},
+{f:"mental",e:"mental",pos:"adj",u:1,t:"H"},
+{f:"actuación",e:"performance, acting",pos:"n",u:1,t:"H",g:"f"},
+{f:"tasa",e:"rate",pos:"n",u:1,t:"H",g:"f"},
+{f:"manifestación",e:"protest",pos:"n",u:1,t:"H",g:"f"},
+{f:"empresario",e:"business person, entrepreneur",pos:"n",u:1,t:"H"},
+{f:"llave",e:"key",pos:"n",u:1,t:"H",g:"f"},
+{f:"consciente",e:"conscious, aware",pos:"adj",u:1,t:"H"},
+{f:"impacto",e:"impact",pos:"n",u:1,t:"H",g:"m"},
+{f:"cola",e:"queue, tail",pos:"n",u:1,t:"H",g:"f"},
+{f:"entorno",e:"environment, surroundings",pos:"n",u:9,t:"H",g:"m"},
+{f:"preferible",e:"preferable",pos:"adj",u:1,t:"H"},
+{f:"vidrio",e:"glass",pos:"n",u:1,t:"H",g:"m"},
+{f:"imaginación",e:"imagination",pos:"n",u:1,t:"H",g:"f"},
+{f:"sobrevivir",e:"survive I surviving",pos:"v",u:1,t:"H"},
+{f:"violento",e:"violent",pos:"adj",u:1,t:"H"},
+{f:"claro**",e:"of course, clearly",pos:"adv",u:1,t:"H"},
+{f:"protagonista",e:"protagonist/main character",pos:"n",u:1,t:"H"},
+{f:"pobreza",e:"poverty",pos:"n",u:1,t:"H",g:"f"},
+{f:"fabricar",e:"manufacture, produce I manufacturing, producing",pos:"v",u:1,t:"H"},
+{f:"quejarse",e:"complain I complaining",pos:"v",u:1,t:"H"},
+{f:"cariño",e:"affection, love",pos:"n",u:1,t:"H",g:"m"},
+{f:"monte",e:"hill, hills, countryside",pos:"n",u:2,t:"H",g:"m"},
+{f:"herida",e:"wound, injury",pos:"n",u:1,t:"H",g:"f"},
+{f:"conectar",e:"connect, plug in I connecting, plugging in",pos:"v",u:1,t:"H"},
+{f:"vergüenza",e:"embarrassment, shame",pos:"n",u:1,t:"H",g:"f"},
+{f:"engañar",e:"trick, deceive I tricking, deceiving",pos:"v",u:1,t:"H"},
+{f:"cáncer",e:"cancer",pos:"n",u:1,t:"H",g:"m"},
+{f:"castellano",e:"Spanish",pos:"n",u:1,t:"H",g:"m"},
+{f:"cultivo",e:"crop",pos:"n",u:1,t:"H",g:"m"},
+{f:"cita",e:"appointment, date",pos:"n",u:8,t:"H",g:"f"},
+{f:"laboratorio",e:"laboratory",pos:"n",u:1,t:"H",g:"m"},
+{f:"permiso",e:"permission",pos:"n",u:1,t:"H",g:"m"},
+{f:"aceite",e:"oil",pos:"n",u:1,t:"H",g:"m"},
+{f:"divertir; divertirse",e:"amuse, entertain I amusing, entertaining",pos:"v",u:1,t:"H"},
+{f:"torre",e:"tower",pos:"n",u:1,t:"H",g:"f"},
+{f:"lago",e:"lake",pos:"n",u:1,t:"H",g:"m"},
+{f:"pesado",e:"heavy, boring",pos:"adj",u:1,t:"H"},
+{f:"lujo",e:"luxury",pos:"n",u:1,t:"H",g:"m"},
+{f:"alegrar",e:"make happy, cheer up",pos:"v",u:8,t:"H"},
+{f:"talento",e:"talent",pos:"n",u:1,t:"H",g:"m"},
+{f:"alcohol",e:"alcohol",pos:"n",u:2,t:"H",g:"m"},
+{f:"guía",e:"guide, guide book",pos:"n",u:4,t:"H"},
+{f:"dispositivo",e:"device, gadget",pos:"n",u:1,t:"H",g:"m"},
+{f:"complicado",e:"difficult, complicated",pos:"adj",u:1,t:"H"},
+{f:"suspender",e:"fail",pos:"v",u:1,t:"H"},
+{f:"castigar",e:"punish",pos:"v",u:1,t:"H"},
+{f:"digital",e:"digital",pos:"adj",u:8,t:"H"},
+{f:"desastre",e:"disaster",pos:"n",u:1,t:"H",g:"m"},
+{f:"turismo",e:"tourism",pos:"n",u:1,t:"H",g:"m"},
+{f:"huelga",e:"strike",pos:"n",u:1,t:"H",g:"m"},
+{f:"torneo",e:"tournament",pos:"n",u:1,t:"H",g:"m"},
+{f:"descargar",e:"download, unload",pos:"v",u:1,t:"H"},
+{f:"incendio",e:"fire",pos:"n",u:1,t:"H",g:"m"},
+{f:"orgulloso",e:"proud",pos:"adj",u:1,t:"H"},
+{f:"romántico",e:"romantic",pos:"adj",u:1,t:"H"},
+{f:"sensible",e:"sensitive",pos:"adj",u:1,t:"H"},
+{f:"traducción",e:"translation",pos:"n",u:1,t:"H",g:"f"},
+{f:"igualdad",e:"equality",pos:"n",u:1,t:"H",g:"f"},
+{f:"enseguida",e:"straight away",pos:"adv",u:1,t:"H"},
+{f:"arroz",e:"rice",pos:"n",u:1,t:"H",g:"m"},
+{f:"charlar",e:"chat",pos:"v",u:1,t:"H"},
+{f:"cocinar",e:"cook",pos:"v",u:1,t:"H"},
+{f:"apropiado",e:"appropriate, suitable",pos:"adj",u:8,t:"H"},
+{f:"estricto",e:"strict",pos:"adj",u:1,t:"H"},
+{f:"juguete",e:"toy",pos:"n",u:1,t:"H",g:"m"},
+{f:"aficionado",e:"fan",pos:"n",u:6,t:"H",g:"m"},
+{f:"navegar",e:"surf, browse",pos:"v",u:1,t:"H"},
+{f:"despacio",e:"slow",pos:"adv",u:1,t:"H"},
+{f:"fatal",e:"terrible, awful",pos:"adj",u:1,t:"H"},
+{f:"obligatorio",e:"compulsory",pos:"adj",u:1,t:"H"},
+{f:"aula",e:"classroom",pos:"n",u:1,t:"H",g:"f"},
+{f:"saludable",e:"healthy",pos:"adj",u:2,t:"H"},
+{f:"situado",e:"situated, located",pos:"adj",u:1,t:"H"},
+{f:"vago",e:"lazy",pos:"adj",u:1,t:"H"},
+{f:"alquilar",e:"hire, rent",pos:"v",u:1,t:"H"},
+{f:"discriminación",e:"discrimination",pos:"n",u:1,t:"H",g:"f"},
+{f:"nacionalidad",e:"nationality",pos:"n",u:1,t:"H",g:"f"},
+{f:"retraso",e:"delay",pos:"n",u:1,t:"H",g:"m"},
+{f:"ascensor",e:"lift, elevator",pos:"n",u:1,t:"H",g:"m"},
+{f:"documental",e:"documentary",pos:"n",u:1,t:"H",g:"m"},
+{f:"relajar; relajarse",e:"relax",pos:"v",u:1,t:"H"},
+{f:"ambicioso",e:"ambitious",pos:"adj",u:1,t:"H"},
+{f:"acuático",e:"water, aquatic",pos:"adj",u:1,t:"H"},
+{f:"afortunado",e:"fortunate, lucky",pos:"adj",u:1,t:"H"},
+{f:"asqueroso",e:"disgusting, revolting",pos:"adj",u:1,t:"H"},
+{f:"calefacción",e:"heating",pos:"n",u:2,t:"H",g:"f"},
+{f:"ciberacoso",e:"cyberbullying",pos:"n",u:1,t:"H",g:"m"},
+{f:"cigarrillo",e:"cigarette",pos:"n",u:1,t:"H",g:"m"},
+{f:"comprensivo",e:"understanding",pos:"adj",u:1,t:"H"},
+{f:"contraseña",e:"password",pos:"n",u:1,t:"H",g:"f"},
+{f:"decepcionante",e:"disappointing",pos:"adj",u:8,t:"H"},
+{f:"deportista",e:"sportsperson",pos:"n",u:1,t:"H"},
+{f:"desafortunadamente",e:"unfortunately",pos:"adv",u:1,t:"H"},
+{f:"descuento",e:"discount",pos:"n",u:1,t:"H",g:"m"},
+{f:"emocionado",e:"excited",pos:"adj",u:1,t:"H"},
+{f:"emoticón",e:"emoji",pos:"n",u:1,t:"H",g:"m"},
+{f:"hispanohablante",e:"Spanish-speaking",pos:"adj",u:1,t:"H"},
+{f:"mascota",e:"pet",pos:"n",u:1,t:"H",g:"f"},
+{f:"natación",e:"swimming",pos:"n",u:4,t:"H",g:"f"},
+{f:"ocupado",e:"busy, taken, occupied",pos:"adj",u:7,t:"H"},
+{f:"portátil",e:"laptop",pos:"n",u:1,t:"H",g:"m"},
+{f:"relajante",e:"relaxing",pos:"adj",u:1,t:"H"},
+{f:"sobrepeso",e:"obesity, excess weight",pos:"n",u:1,t:"H",g:"m"},
+{f:"telenovela",e:"soap , TV serial",pos:"n",u:1,t:"H",g:"f"},
+{f:"tolerante",e:"tolerant",pos:"adj",u:1,t:"H"}];
+var NP_ES=[{f:"amigo",e:"friend",g:"m"},{f:"amiga",e:"friend",g:"f"},{f:"hombre",e:"man",g:"m"},{f:"mujer",e:"woman",g:"f"},{f:"chico",e:"boy",g:"m"},{f:"chica",e:"girl",g:"f"},{f:"niño",e:"child",g:"m"},{f:"niña",e:"child",g:"f"},{f:"padre",e:"father",g:"m"},{f:"madre",e:"mother",g:"f"},{f:"hermano",e:"brother",g:"m"},{f:"hermana",e:"sister",g:"f"},{f:"primo",e:"cousin",g:"m"},{f:"prima",e:"cousin",g:"f"},{f:"profesor",e:"teacher",g:"m"},{f:"profesora",e:"teacher",g:"f"},{f:"alumno",e:"pupil",g:"m"},{f:"alumna",e:"pupil",g:"f"},{f:"perro",e:"dog",g:"m"},{f:"gato",e:"cat",g:"m"},{f:"pájaro",e:"bird",g:"m"},{f:"conejo",e:"rabbit",g:"m"}];
+var NG_ES=[{f:"libro",e:"book",g:"m"},{f:"bolso",e:"bag",g:"m"},{f:"bolígrafo",e:"pen",g:"m"},{f:"teléfono",e:"phone",g:"m"},{f:"ordenador",e:"computer",g:"m"},{f:"móvil",e:"mobile phone",g:"m"},{f:"película",e:"film",g:"f"},{f:"restaurante",e:"restaurant",g:"m"},{f:"menú",e:"menu",g:"m"},{f:"pastel",e:"cake",g:"m"},{f:"apartamento",e:"flat",g:"m"},{f:"jardín",e:"garden",g:"m"},{f:"deporte",e:"sport",g:"m"},{f:"trabajo",e:"work",g:"m"},{f:"país",e:"country",g:"m"},{f:"problema",e:"problem",g:"m"},{f:"coche",e:"car",g:"m"},{f:"casa",e:"house",g:"f"},{f:"escuela",e:"school",g:"f"},{f:"ciudad",e:"city",g:"f"},{f:"calle",e:"street",g:"f"},{f:"canción",e:"song",g:"f"},{f:"música",e:"music",g:"f"},{f:"lengua",e:"language",g:"f"},{f:"idea",e:"idea",g:"f"},{f:"historia",e:"story",g:"f"},{f:"pregunta",e:"question",g:"f"},{f:"respuesta",e:"answer",g:"f"},{f:"semana",e:"week",g:"f"},{f:"foto",e:"photo",g:"f"},{f:"comida",e:"food",g:"f"},{f:"bebida",e:"drink",g:"f"},{f:"tecnología",e:"technology",g:"f"},{f:"salud",e:"health",g:"f"},{f:"naturaleza",e:"nature",g:"f"},{f:"playa",e:"beach",g:"f"},{f:"montaña",e:"mountain",g:"f"}];
+var DA_ES=[{e:"green",ms:"verde",fs:"verde",mp:"verdes",fp:"verdes",pre:false,pool:"general"},{e:"blue",ms:"azul",fs:"azul",mp:"azules",fp:"azules",pre:false,pool:"general"},{e:"red",ms:"rojo",fs:"roja",mp:"rojos",fp:"rojas",pre:false,pool:"general"},{e:"white",ms:"blanco",fs:"blanca",mp:"blancos",fp:"blancas",pre:false,pool:"general"},{e:"black",ms:"negro",fs:"negra",mp:"negros",fp:"negras",pre:false,pool:"general"},{e:"grey",ms:"gris",fs:"gris",mp:"grises",fp:"grises",pre:false,pool:"general"},{e:"brown",ms:"marrón",fs:"marrón",mp:"marrones",fp:"marrones",pre:false,pool:"general"},{e:"yellow",ms:"amarillo",fs:"amarilla",mp:"amarillos",fp:"amarillas",pre:false,pool:"general"},{e:"big",ms:"grande",fs:"grande",mp:"grandes",fp:"grandes",pre:false,pool:"any"},{e:"small",ms:"pequeño",fs:"pequeña",mp:"pequeños",fp:"pequeñas",pre:false,pool:"any"},{e:"long",ms:"largo",fs:"larga",mp:"largos",fp:"largas",pre:false,pool:"general"},{e:"short",ms:"corto",fs:"corta",mp:"cortos",fp:"cortas",pre:false,pool:"general"},{e:"good",ms:"bueno",fs:"buena",mp:"buenos",fp:"buenas",pre:false,pool:"any"},{e:"bad",ms:"malo",fs:"mala",mp:"malos",fp:"malas",pre:false,pool:"any"},{e:"beautiful",ms:"bonito",fs:"bonita",mp:"bonitos",fp:"bonitas",pre:false,pool:"any"},{e:"old",ms:"viejo",fs:"vieja",mp:"viejos",fp:"viejas",pre:false,pool:"any"},{e:"new",ms:"nuevo",fs:"nueva",mp:"nuevos",fp:"nuevas",pre:false,pool:"general"},{e:"happy",ms:"contento",fs:"contenta",mp:"contentos",fp:"contentas",pre:false,pool:"person"},{e:"sad",ms:"triste",fs:"triste",mp:"tristes",fp:"tristes",pre:false,pool:"person"},{e:"kind",ms:"amable",fs:"amable",mp:"amables",fp:"amables",pre:false,pool:"person"},{e:"intelligent",ms:"inteligente",fs:"inteligente",mp:"inteligentes",fp:"inteligentes",pre:false,pool:"person"},{e:"hard-working",ms:"trabajador",fs:"trabajadora",mp:"trabajadores",fp:"trabajadoras",pre:false,pool:"person"},{e:"lazy",ms:"perezoso",fs:"perezosa",mp:"perezosos",fp:"perezosas",pre:false,pool:"person"},{e:"interesting",ms:"interesante",fs:"interesante",mp:"interesantes",fp:"interesantes",pre:false,pool:"any"},{e:"boring",ms:"aburrido",fs:"aburrida",mp:"aburridos",fp:"aburridas",pre:false,pool:"any"},{e:"funny",ms:"gracioso",fs:"graciosa",mp:"graciosos",fp:"graciosas",pre:false,pool:"person"},{e:"serious",ms:"serio",fs:"seria",mp:"serios",fp:"serias",pre:false,pool:"person"},{e:"shy",ms:"tímido",fs:"tímida",mp:"tímidos",fp:"tímidas",pre:false,pool:"person"},{e:"proud",ms:"orgulloso",fs:"orgullosa",mp:"orgullosos",fp:"orgullosas",pre:false,pool:"person"},{e:"popular",ms:"popular",fs:"popular",mp:"populares",fp:"populares",pre:false,pool:"any"},{e:"famous",ms:"famoso",fs:"famosa",mp:"famosos",fp:"famosas",pre:false,pool:"any"},{e:"healthy",ms:"sano",fs:"sana",mp:"sanos",fp:"sanas",pre:false,pool:"person"},{e:"ill",ms:"enfermo",fs:"enferma",mp:"enfermos",fp:"enfermas",pre:false,pool:"person"},{e:"tired",ms:"cansado",fs:"cansada",mp:"cansados",fp:"cansadas",pre:false,pool:"person"},{e:"expensive",ms:"caro",fs:"cara",mp:"caros",fp:"caras",pre:false,pool:"general"},{e:"cheap",ms:"barato",fs:"barata",mp:"baratos",fp:"baratas",pre:false,pool:"general"},{e:"easy",ms:"fácil",fs:"fácil",mp:"fáciles",fp:"fáciles",pre:false,pool:"any"},{e:"difficult",ms:"difícil",fs:"difícil",mp:"difíciles",fp:"difíciles",pre:false,pool:"any"},{e:"fast",ms:"rápido",fs:"rápida",mp:"rápidos",fp:"rápidas",pre:false,pool:"any"},{e:"slow",ms:"lento",fs:"lenta",mp:"lentos",fp:"lentas",pre:false,pool:"any"},{e:"important",ms:"importante",fs:"importante",mp:"importantes",fp:"importantes",pre:false,pool:"any"},{e:"modern",ms:"moderno",fs:"moderna",mp:"modernos",fp:"modernas",pre:false,pool:"any"},{e:"traditional",ms:"tradicional",fs:"tradicional",mp:"tradicionales",fp:"tradicionales",pre:false,pool:"any"},{e:"clean",ms:"limpio",fs:"limpia",mp:"limpios",fp:"limpias",pre:false,pool:"general"},{e:"dirty",ms:"sucio",fs:"sucia",mp:"sucios",fp:"sucias",pre:false,pool:"general"},{e:"noisy",ms:"ruidoso",fs:"ruidosa",mp:"ruidosos",fp:"ruidosas",pre:false,pool:"general"},{e:"quiet",ms:"tranquilo",fs:"tranquila",mp:"tranquilos",fp:"tranquilas",pre:false,pool:"any"}];
+var EX_ES=[{f:"no hay mal que por bien no venga",lit:"there's no bad from which good doesn't come",mean:"every cloud has a silver lining",tag:"😊 optimism"},{f:"costar un ojo de la cara",lit:"to cost an eye from the face",mean:"to cost an arm and a leg",tag:"💰 money"},{f:"estar en las nubes",lit:"to be in the clouds",mean:"to have your head in the clouds / daydream",tag:"☁️ personality"},{f:"tener mala leche",lit:"to have bad milk",mean:"to be in a bad mood / be mean",tag:"😤 feelings"},{f:"ponerse las pilas",lit:"to put the batteries in",mean:"to get your act together / get motivated",tag:"⚡ school / work"},{f:"dar en el clavo",lit:"to hit the nail",mean:"to hit the nail on the head",tag:"🔨 accuracy"},{f:"estar como una cabra",lit:"to be like a goat",mean:"to be crazy",tag:"🐐 personality"},{f:"no hay mal tiempo para el deporte",lit:"there's no bad weather for sport",mean:"there's no excuse not to exercise",tag:"⚽ sport"},{f:"tomar el pelo",lit:"to take the hair",mean:"to pull someone's leg / make fun of someone",tag:"😄 humour"},{f:"no hay dos sin tres",lit:"there are no two without three",mean:"things come in threes",tag:"🔢 life"},{f:"meter la pata",lit:"to put the paw in",mean:"to put your foot in it / make a blunder",tag:"🦶 daily life"},{f:"ser pan comido",lit:"to be eaten bread",mean:"to be a piece of cake / dead easy",tag:"🍞 school"},{f:"llover a cántaros",lit:"to rain pitchers",mean:"to rain cats and dogs",tag:"🌧️ weather"},{f:"no tener pelos en la lengua",lit:"not to have hairs on the tongue",mean:"to speak your mind / not mince words",tag:"👅 personality"},{f:"estar hecho polvo",lit:"to be made into dust",mean:"to be exhausted",tag:"😴 feelings"},{f:"buscar una aguja en un pajar",lit:"to look for a needle in a haystack",mean:"to look for a needle in a haystack",tag:"🔍 challenges"},{f:"no estar el horno para bollos",lit:"the oven isn't ready for buns",mean:"it's not a good time / the moment isn't right",tag:"⏰ daily life"},{f:"más vale tarde que nunca",lit:"it's better late than never",mean:"better late than never",tag:"⏳ time"},{f:"camarón que se duerme, se lo lleva la corriente",lit:"the shrimp that falls asleep gets carried away by the current",mean:"you snooze, you lose",tag:"🦐 motivation"},{f:"no por mucho madrugar amanece más temprano",lit:"waking up early doesn't make the sun rise sooner",mean:"rushing won't make things happen faster",tag:"⏰ patience"},{f:"a mal tiempo, buena cara",lit:"in bad weather, put on a good face",mean:"keep smiling in tough times",tag:"😊 optimism"},{f:"cada loco con su tema",lit:"every madman with his topic",mean:"everyone is obsessed with their own thing",tag:"🤪 personality"},{f:"quien mucho abarca poco aprieta",lit:"whoever grabs a lot squeezes little",mean:"don't bite off more than you can chew",tag:"💪 school / work"},{f:"estar entre la espada y la pared",lit:"to be between the sword and the wall",mean:"to be between a rock and a hard place",tag:"😬 difficult decisions"},{f:"tener agallas",lit:"to have gills",mean:"to have guts / be brave",tag:"💪 personality"},{f:"no se ganó Zamora en una hora",lit:"Zamora wasn't won in an hour",mean:"Rome wasn't built in a day",tag:"⏳ patience"},{f:"en boca cerrada no entran moscas",lit:"into a closed mouth no flies enter",mean:"silence is golden",tag:"🤫 advice"},{f:"hacer la vista gorda",lit:"to make a fat look",mean:"to turn a blind eye",tag:"👁️ fairness"},{f:"ser un hueso duro de roer",lit:"to be a hard bone to gnaw",mean:"to be a tough nut to crack",tag:"💪 challenges"},{f:"llevar el gato al agua",lit:"to take the cat to the water",mean:"to pull off something difficult",tag:"🐱 achievement"}];
+var TE_ES=[{f:"ahora",e:"now",tenses:["present"],note:"Classic present-tense marker"},{f:"ahora mismo",e:"right now",tenses:["present"],note:"Emphasises the present moment"},{f:"hoy",e:"today",tenses:["present","perfect"],note:"Today's events → present or preterite"},{f:"normalmente",e:"normally",tenses:["present","imperfect"],note:"Routine → present; past habit → imperfect"},{f:"generalmente",e:"generally",tenses:["present","imperfect"],note:"General habit → present or imperfect"},{f:"siempre",e:"always",tenses:["present","imperfect"],note:"Always → present habit; used to always → imperfect"},{f:"a menudo",e:"often",tenses:["present","imperfect"],note:"Frequency → present or imperfect"},{f:"a veces",e:"sometimes",tenses:["present","imperfect"],note:"Frequency → present or imperfect"},{f:"de vez en cuando",e:"from time to time",tenses:["present","imperfect"],note:"Irregular frequency → present or imperfect"},{f:"raramente",e:"rarely",tenses:["present","imperfect"],note:"Low frequency → present or imperfect"},{f:"nunca",e:"never",tenses:["present","imperfect"],note:"With no/nunca — present or imperfect negation"},{f:"todos los días",e:"every day",tenses:["present","imperfect"],note:"Daily routine → present; past routine → imperfect"},{f:"cada semana",e:"every week",tenses:["present","imperfect"],note:"Weekly routine → present or imperfect"},{f:"actualmente",e:"currently, at present",tenses:["present"],note:"Means 'currently' NOT 'actually' — false friend! Use with present"},{f:"todavía",e:"still, yet",tenses:["present"],note:"'Still' → present; 'yet' in negative → present"},{f:"ya",e:"already, now",tenses:["present","perfect"],note:"'Already' → preterite; 'now' → present"},{f:"ayer",e:"yesterday",tenses:["perfect"],note:"Yesterday = completed action → preterite"},{f:"anteayer",e:"the day before yesterday",tenses:["perfect"],note:"Completed past → preterite"},{f:"la semana pasada",e:"last week",tenses:["perfect"],note:"Completed past period → preterite"},{f:"el mes pasado",e:"last month",tenses:["perfect"],note:"Completed past period → preterite"},{f:"el año pasado",e:"last year",tenses:["perfect"],note:"Completed past period → preterite"},{f:"hace…",e:"…ago",tenses:["perfect"],note:"hace + time = '… ago' → always preterite"},{f:"recientemente",e:"recently",tenses:["perfect"],note:"Recently = completed → preterite or perfect"},{f:"de repente",e:"suddenly",tenses:["perfect"],note:"Sudden completed event → preterite"},{f:"primero",e:"first",tenses:["perfect"],note:"Sequence of completed events → preterite"},{f:"luego",e:"then, next",tenses:["perfect"],note:"Next step in sequence → preterite"},{f:"después",e:"after, afterwards",tenses:["perfect","imperfect"],note:"After a completed event → preterite; ongoing → imperfect"},{f:"antes",e:"before",tenses:["perfect","imperfect"],note:"Before a past event → preterite; 'before (in old days)' → imperfect"},{f:"por fin",e:"finally, at last",tenses:["perfect"],note:"End of sequence → preterite"},{f:"antes",e:"before, in the past",tenses:["imperfect"],note:"Strong imperfect signal — past states/habits"},{f:"cuando era pequeño/a",e:"when I was young",tenses:["imperfect"],note:"Classic imperfect phrase — past state"},{f:"en aquel entonces",e:"at that time, back then",tenses:["imperfect"],note:"Describes how things used to be → imperfect"},{f:"en aquella época",e:"in those days, at that time",tenses:["imperfect"],note:"Past era → imperfect"},{f:"mientras",e:"while, whilst",tenses:["imperfect"],note:"Ongoing background action → imperfect"},{f:"cuando",e:"when",tenses:["imperfect","perfect","future"],note:"'When' in past narrative → imperfect (background) or preterite (event); future → future"},{f:"mañana",e:"tomorrow",tenses:["future"],note:"Tomorrow = future event → future or ir a + infinitive"},{f:"pasado mañana",e:"the day after tomorrow",tenses:["future"],note:"Future → future tense"},{f:"la semana que viene",e:"next week",tenses:["future"],note:"Next week → future tense"},{f:"el mes que viene",e:"next month",tenses:["future"],note:"Next month → future tense"},{f:"el año que viene",e:"next year",tenses:["future"],note:"Next year → future tense"},{f:"pronto",e:"soon",tenses:["future"],note:"Soon → future tense"},{f:"más tarde",e:"later",tenses:["future","conditional"],note:"'Later' → future; in conditional sentence → conditional"},{f:"algún día",e:"one day, someday",tenses:["future","conditional"],note:"'Someday' (hopeful) → future; hypothetical → conditional"},{f:"en el futuro",e:"in the future",tenses:["future","conditional"],note:"Future plans → future tense; wishes → conditional"},{f:"dentro de",e:"in (+ time period)",tenses:["future"],note:"dentro de + time = 'in X time from now' → future tense"},{f:"cuando sea mayor",e:"when I'm older",tenses:["future"],note:"Future with subjunctive → future plans"},{f:"esta noche",e:"tonight, this evening",tenses:["future","present"],note:"Tonight → future plans; or present if happening now"},{f:"si tuviera…",e:"if I had…",tenses:["conditional"],note:"si + imperfect subjunctive triggers the conditional"},{f:"si fuera…",e:"if I were…",tenses:["conditional"],note:"si + imperfect subjunctive → conditional"},{f:"si pudiera…",e:"if I could…",tenses:["conditional"],note:"si + imperfect subjunctive → conditional main clause"},{f:"en un mundo ideal",e:"in an ideal world",tenses:["conditional"],note:"Hypothetical → conditional"},{f:"idealmente",e:"ideally",tenses:["conditional"],note:"Ideal scenario → conditional"},{f:"si",e:"if",tenses:["conditional"],note:"si + imperfect subj = conditional structure"},{f:"de todas formas",e:"anyway, all the same",tenses:["conditional"],note:"Concession in hypothetical argument → often conditional"},{f:"me gustaría",e:"I would like",tenses:["conditional"],note:"Classic conditional form — wish/desire"}];
+window.currentLang='fr';
+function swap(a,s){a.length=0;for(var i=0;i<s.length;i++)a.push(s[i]);}
+window.switchLang=function(lang){
+  window.currentLang=lang;var es=lang==='es';
+  try{localStorage.setItem('gcse_lang',lang);}catch(e){}
+  swap(VOCAB,es?VES:_VF);
+  swap(DRILL_NOUNS_PERSON,es?NP_ES:_NP);
+  swap(DRILL_NOUNS_GENERAL,es?NG_ES:_NG);
+  swap(DRILL_NOUNS,DRILL_NOUNS_PERSON.concat(DRILL_NOUNS_GENERAL));
+  swap(DRILL_ADJS,es?DA_ES:_DA);
+  swap(EXPRESSIONS,es?EX_ES:_EX);
+  swap(TIME_EXPRESSIONS,es?TE_ES:_TE);
+  var fb=document.getElementById('langFR'),eb=document.getElementById('langES');
+  if(fb){fb.style.background=es?'transparent':'var(--accent)';fb.style.color=es?'var(--text2)':'#000';}
+  if(eb){eb.style.background=es?'var(--accent)':'transparent';eb.style.color=es?'#000':'var(--text2)';}
+  var h1=document.getElementById('logoH1'),sb=document.getElementById('logoSub');
+  if(h1)h1.innerHTML=es?'Spanish <span>GCSE</span>':'French <span>GCSE</span>';
+  if(sb)sb.textContent=es?'AQA 8692 · 2026 Exams':'AQA 8652 · 2026 Exams';
+  var fl=document.getElementById('menuLangFlag');
+  if(fl)fl.textContent=es?'🇪🇸':'🇫🇷';
+  var dd=document.querySelector('#modeDrill .mode-desc');
+  if(dd)dd.textContent='Type the full '+(es?'Spanish':'French')+' phrase with correct gender agreement.';
+  var sd=document.querySelector('#modeSyn .mode-desc');
+  if(sd)sd.textContent='Given an English meaning, recall all '+(es?'Spanish':'French')+' synonyms.';
+  var ed=document.querySelector('#modeExpr .mode-desc');
+  if(ed)ed.textContent=es?'Hilarious Spanish phrases that make no sense word-for-word. Can you guess what they mean?':'Hilarious French phrases that make no sense word-for-word. Can you guess what they mean?';
+  var ei=document.querySelector('#modeExpr .mode-icon');
+  if(ei)ei.textContent=es?'🐂':'🐓';
+  var fc=document.getElementById('modeFaux');
+  if(fc)fc.style.display=es?'none':'';
+  renderProfiles();
+};
+saveProfiles=function(){try{localStorage.setItem(currentLang+'_profiles',JSON.stringify(profiles));}catch(e){}};
+loadProfiles=function(){try{profiles=JSON.parse(localStorage.getItem(currentLang+'_profiles'))||[];}catch(e){profiles=[];}};
+getProgress=function(pid){try{return JSON.parse(localStorage.getItem(currentLang+'_progress_'+pid))||{};}catch(e){return {};}};
+saveProgress=function(pid,data){try{localStorage.setItem(currentLang+'_progress_'+pid,JSON.stringify(data));}catch(e){}};
+newDrillPrompt=function(){
+  var adj=DRILL_ADJS[Math.floor(Math.random()*DRILL_ADJS.length)];
+  var pool=adj.pool==='person'?DRILL_NOUNS_PERSON:adj.pool==='general'?DRILL_NOUNS_GENERAL:DRILL_NOUNS;
+  var noun=pool[Math.floor(Math.random()*pool.length)];
+  var num=Math.random()<0.5?'sg':'pl';
+  var g=noun.g,es=currentLang==='es';
+  var adjForm=num==='sg'?(g==='m'?adj.ms:adj.fs):(g==='m'?adj.mp:adj.fp);
+  var article,nounFr,nounEn;
+  var IRR={man:'men',woman:'women',child:'children',person:'people',fish:'fish'};
+  if(num==='sg'){
+    article=es?(g==='m'?'un':'una'):(g==='m'?'un':'une');
+    nounFr=noun.f;nounEn='a '+noun.e;
+  }else{
+    if(es){article=g==='m'?'unos':'unas';nounFr=/[aeiouáéíóú]$/i.test(noun.f)?noun.f+'s':noun.f+'es';}
+    else{article=adj.pre?'de':'des';nounFr=noun.f+'s';}
+    nounEn='some '+(IRR[noun.e]||noun.e+'s');
+  }
+  var adjPre=adj.pre&&!es;
+  var answer=adjPre?article+' '+adjForm+' '+nounFr:article+' '+nounFr+' '+adjForm;
+  var ea=adj.e,enPrompt=num==='sg'?('a'+(/^[aeiou]/i.test(ea)?'n':'')+' '+ea+' '+noun.e):('some '+ea+' '+noun.e+'s');
+  drillCurrent={noun:noun,adj:adj,num:num,g:g,article:article,nounFr:nounFr,adjForm:adjForm,answer:answer,enPrompt:enPrompt,adjPre:adjPre};
+  document.getElementById('drillPromptEn').textContent=enPrompt;
+  document.getElementById('drillPromptHint').textContent=num==='pl'&&adjPre?'Remember: de + adjective + noun in the plural':'';
+  var inp=document.getElementById('drillInput');
+  inp.value='';inp.className='drill-input';inp.disabled=false;
+  document.getElementById('drillFeedback').innerHTML='';
+  document.getElementById('drillCheckBtn').disabled=false;
+  document.getElementById('drillRevealBtn').style.display='none';
+  inp.focus();
+};
+// Override remaining fr_-prefixed storage functions
+getProfileMeta=function(pid){try{return JSON.parse(localStorage.getItem(currentLang+'_meta_'+pid))||{};}catch(e){return {};}};
+saveProfileMeta=function(pid,data){try{localStorage.setItem(currentLang+'_meta_'+pid,JSON.stringify(data));}catch(e){}};
+getSynProgress=function(pid){try{return JSON.parse(localStorage.getItem(currentLang+'_syn_'+pid))||{};}catch(e){return {};}};
+saveSynProgress=function(pid,data){try{localStorage.setItem(currentLang+'_syn_'+pid,JSON.stringify(data));}catch(e){}};
+getTimeProgress=function(pid){try{return JSON.parse(localStorage.getItem(currentLang+'_time_'+pid))||{};}catch(e){return {};}};
+saveTimeProgress=function(pid,data){try{localStorage.setItem(currentLang+'_time_'+pid,JSON.stringify(data));}catch(e){}};
+getDailyProgress=function(pid){
+  var today=todayISO();
+  try{
+    var data=JSON.parse(localStorage.getItem(currentLang+'_daily_'+pid))||{};
+    if(data.date!==today)return{date:today,correct:0,streak:data.date===yesterdayISO()?data.streak||0:0};
+    return data;
+  }catch(e){return{date:today,correct:0,streak:0};}
+};
+saveDailyProgress=function(pid,data){try{localStorage.setItem(currentLang+'_daily_'+pid,JSON.stringify(data));}catch(e){}};
+getRankScore=function(pid){return JSON.parse(localStorage.getItem(currentLang+'_rankscore_'+pid)||'{"score":0,"lastMastered":0}');};
+saveRankScore=function(pid,data){try{localStorage.setItem(currentLang+'_rankscore_'+pid,JSON.stringify(data));}catch(e){}};
+getWeeklyHistory=function(pid){try{return JSON.parse(localStorage.getItem(currentLang+'_weekly_'+pid))||{};}catch(e){return {};}};
+saveWeeklyHistory=function(pid,data){try{localStorage.setItem(currentLang+'_weekly_'+pid,JSON.stringify(data));}catch(e){}};
+
+})();
+</script>
+</body>
+</html>
